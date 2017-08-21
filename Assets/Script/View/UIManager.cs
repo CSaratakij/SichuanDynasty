@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace SichuanDynasty
+namespace SichuanDynasty.UI
 {
     public class UIManager : MonoBehaviour
     {

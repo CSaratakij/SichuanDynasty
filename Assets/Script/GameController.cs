@@ -6,14 +6,17 @@ namespace SichuanDynasty
 {
     public class GameController : MonoBehaviour
     {
-        bool _isGameInit;
-        bool _isGameStart;
-        bool _isGameOver;
-
+        public const int MAX_PLAYER_SUPPORT = 2;
+        public const int MAX_PHASE_PER_PLAYER = 2;
 
         public bool IsGameInit { get { return _isGameInit; } }
         public bool IsGameStart { get { return _isGameStart; } }
         public bool IsGameOver { get { return _isGameOver; } }
+
+
+        bool _isGameInit;
+        bool _isGameStart;
+        bool _isGameOver;
 
 
         public GameController()
