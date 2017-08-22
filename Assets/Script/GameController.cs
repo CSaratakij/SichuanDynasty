@@ -16,6 +16,7 @@ namespace SichuanDynasty
         public bool IsGameInit { get { return _isGameInit; } }
         public bool IsGameStart { get { return _isGameStart; } }
         public bool IsGameOver { get { return _isGameOver; } }
+        public bool IsGamePause { get { return _isGamePause; } }
 
         public int TotalTurn { get { return _totalTurn; } }
         public Phase CurrentPhase { get { return _currentPhase; } }
@@ -37,6 +38,7 @@ namespace SichuanDynasty
         bool _isGameInit;
         bool _isGameStart;
         bool _isGameOver;
+        bool _isGamePause;
 
         bool _isNextTurn;
         bool _isHasWinner;
@@ -55,6 +57,7 @@ namespace SichuanDynasty
             _isGameInit = false;
             _isGameStart = false;
             _isGameOver = true;
+            _isGamePause = false;
             _isNextTurn = false;
             _isHasWinner = false;
             _isInitNextTurn = false;
@@ -97,6 +100,12 @@ namespace SichuanDynasty
         public void GameOver()
         {
             _isGameOver = true;
+        }
+
+        public void ToggleGamePause()
+        {
+            _isGamePause = !_isGamePause;
+            Time.timeScale = (_isGamePause) ? 0.0f : 1.0f;
         }
 
         public void SetFirstStarter(int index)
