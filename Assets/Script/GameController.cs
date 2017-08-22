@@ -2,11 +2,19 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 namespace SichuanDynasty
 {
     public class GameController : MonoBehaviour
     {
+        [SerializeField]
+        GameObject[] firstSelectedCards;
+
+        [SerializeField]
+        EventSystem[] eventSystem;
+
+
         public const int MAX_PLAYER_SUPPORT = 2;
         public const int MAX_PHASE_PER_PLAYER = 2;
         public const int MAX_FIELD_CARD_PER_GAME = 4;
@@ -32,6 +40,7 @@ namespace SichuanDynasty
         }
 
 
+        int _firstPlayerIndex;
         int _currentPlayerIndex;
         int _totalTurn;
 
@@ -46,12 +55,16 @@ namespace SichuanDynasty
         bool _isInitNextTurn;
 
         Phase _currentPhase;
+
         Player[] _players;
         Timer _timer;
+
+        Deck _currentPlayerSelectedCardCache;
 
 
         public GameController()
         {
+            _firstPlayerIndex = 0;
             _currentPlayerIndex = 0;
             _totalTurn = 0;
             _isGameInit = false;
@@ -86,6 +99,7 @@ namespace SichuanDynasty
         public void GameStart(int firstPlayerIndex)
         {
             _isNextTurn = true;
+            _firstPlayerIndex = firstPlayerIndex;
             _currentPlayerIndex = firstPlayerIndex;
             _players[firstPlayerIndex].SetTurn(true);
             _currentPhase = Phase.Shuffle;
@@ -93,6 +107,10 @@ namespace SichuanDynasty
             foreach (Player player in _players) {
                 player.FirstDraw(MAX_FIELD_CARD_PER_GAME);
             }
+
+            eventSystem[0].gameObject.SetActive(false);
+            eventSystem[_currentPlayerIndex].gameObject.SetActive(true);
+            eventSystem[_currentPlayerIndex].SetSelectedGameObject(firstSelectedCards[_currentPlayerIndex]);
 
             _isGameStart = true;
         }
@@ -110,7 +128,7 @@ namespace SichuanDynasty
 
         public void SetFirstStarter(int index)
         {
-            _currentPlayerIndex = index;
+            _firstPlayerIndex = index;
         }
 
 
@@ -145,12 +163,47 @@ namespace SichuanDynasty
                 }
 
                 if (_timer.IsStarted && !_timer.IsFinished && !_isHasWinner) {
-
+                    _PhaseHandle();
                 }
             }
         }
 
+        void _PhaseHandle()
+        {
+            switch (_currentPhase) {
+                case Phase.Shuffle:
+                    _ShufflePhaseHandle();
+                break;
+
+                case Phase.Battle:
+                    _BattlePhaseHandle();
+                break;
+
+                default:
+                break;
+            }
+        }
+
         void _ShufflePhaseHandle()
+        {
+            if (_currentPlayerIndex == 0) {
+                //Get Input if player want to be on next phase -> Battle
+
+            } else if (_currentPlayerIndex == 1) {
+                //Get Input if player want to be on next phase -> Battle
+
+            }
+        }
+
+        void _BattlePhaseHandle()
+        {
+        }
+
+        void _Attack(int playerIndex)
+        {
+        }
+
+        void _Heal(int playerIndex)
         {
         }
 
@@ -163,7 +216,13 @@ namespace SichuanDynasty
 
         void _ChangePlayer()
         {
+            _players[_currentPlayerIndex].SetTurn(false);
+            eventSystem[_currentPlayerIndex].gameObject.SetActive(false);
 
+            _currentPlayerIndex = (_currentPlayerIndex == (_players.Length - 1)) ? 0 : _currentPlayerIndex + 1;
+
+            _players[_currentPlayerIndex].SetTurn(true);
+            eventSystem[_currentPlayerIndex].gameObject.SetActive(true);
         }
 
         IEnumerator _NextTurn()
