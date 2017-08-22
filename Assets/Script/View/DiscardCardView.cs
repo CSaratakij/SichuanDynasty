@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 namespace SichuanDynasty.UI
 {
-    public class HealthBarView : MonoBehaviour
+    public class DiscardCardView : MonoBehaviour
     {
         [SerializeField]
         int playerIndex;
@@ -14,14 +14,23 @@ namespace SichuanDynasty.UI
         GameController gameController;
 
         [SerializeField]
-        Text txtHealths;
+        Text txtCardNum;
 
 
         void Update()
         {
             if (gameController) {
+
                 if (gameController.IsGameInit && gameController.IsGameStart && !gameController.IsGameOver) {
-                    txtHealths.text = gameController.Players[playerIndex].Health.Current.ToString();
+
+                    if (gameController.Players[playerIndex].SelectedDeck.Cards.Count > 0) {
+                        gameObject.SetActive(true);
+                        txtCardNum.text = gameController.Players[playerIndex].SelectedDeck.Cards[0].ToString();
+
+                    } else {
+                        gameObject.SetActive(false);
+
+                    }
                 }
             }
         }
