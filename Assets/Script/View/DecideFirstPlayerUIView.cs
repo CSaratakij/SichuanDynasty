@@ -177,15 +177,16 @@ namespace SichuanDynasty.UI
             if (isTile) {
                 _isTie = false;
                 _isProcess = true;
-                _results[0] = RockPaperScissorState.None;
-                _results[1] = RockPaperScissorState.None;
+                for (int i = 0; i < _results.Length; i++) {
+                    _results[i] = RockPaperScissorState.None;
+                }
                 StartCoroutine("_ReShowUI");
             } 
         }
 
         IEnumerator _ReShowUI()
         {
-            yield return new WaitForSeconds(0.5f);
+            yield return new WaitForSeconds(0.8f);
 
             for (int i = 0; i < resultPanels.Length; i++) {
                 foreach (Transform child in resultPanels[i].transform) {
