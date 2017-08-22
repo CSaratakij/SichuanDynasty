@@ -54,12 +54,16 @@ namespace SichuanDynasty
 
         bool _isInitNextTurn;
 
+        bool _isAttacked;
+        bool _isHealed;
+
         Phase _currentPhase;
 
         Player[] _players;
         Timer _timer;
 
-        Deck _currentPlayerSelectedCardCache;
+
+        List<int> _currentSelectedCardCache;
 
 
         public GameController()
@@ -74,8 +78,11 @@ namespace SichuanDynasty
             _isNextTurn = false;
             _isHasWinner = false;
             _isInitNextTurn = false;
+            _isAttacked = false;
+            _isHealed = false;
             _currentPhase = Phase.None;
             _players = new Player[MAX_PLAYER_SUPPORT];
+            _currentSelectedCardCache = new List<int>();
         }
 
         public void ExitGame()
@@ -170,8 +177,10 @@ namespace SichuanDynasty
 
                         }
                     }
+
                 } else {
-                    //GameOver
+                    GameOver();
+
                 }
             }
         }
@@ -195,13 +204,11 @@ namespace SichuanDynasty
         void _ShufflePhaseHandle()
         {
             if (_currentPlayerIndex == 0) {
-                //Get Input if player want to be on next phase -> Battle
                 if (Input.GetButtonDown("Player1_Y")) {
                     _NextPhase();
-                }
+                } 
 
             } else if (_currentPlayerIndex == 1) {
-                //Get Input if player want to be on next phase -> Battle
                 if (Input.GetButtonDown("Player2_Y")) {
                     _NextPhase();
                 }
@@ -213,19 +220,29 @@ namespace SichuanDynasty
         {
             if (_currentPlayerIndex == 0) {
                 if (Input.GetButtonDown("Player1_Y")) {
-                    //Next turn
                     if (!_isInitNextTurn) {
                         _NextTurn();
                         _isInitNextTurn = true;
+                    }
+
+                } else if (Input.GetButtonDown("Player1_X")) {
+                    if (!_isAttacked) {
+                        _Attack();
+                        _isAttacked = true;
                     }
                 }
 
             } else if (_currentPlayerIndex == 1) {
                 if (Input.GetButtonDown("Player2_Y")) {
-                    //Next turn
                     if (!_isInitNextTurn) {
                         _NextTurn();
                         _isInitNextTurn = true;
+                    }
+
+                } else if (Input.GetButtonDown("Player2_X")) {
+                    if (!_isAttacked) {
+                        _Attack();
+                        _isAttacked = true;
                     }
                 }
 
@@ -251,6 +268,8 @@ namespace SichuanDynasty
         void _NextTurn()
         {
             _isInitNextTurn = true;
+            _isAttacked = false;
+            _isHealed = false;
             StartCoroutine("_NextTurnCallBack");
         }
 
