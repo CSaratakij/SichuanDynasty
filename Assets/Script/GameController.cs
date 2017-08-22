@@ -25,9 +25,9 @@ namespace SichuanDynasty
 
         public enum Phase
         {
-            None,
             Shuffle,
-            Battle
+            Battle,
+            None
         }
 
 
