@@ -53,6 +53,11 @@ namespace SichuanDynasty
             _isPaused = false;
         }
 
+        public void Stop()
+        {
+            StopCoroutine("_TimerCallBack");
+        }
+
 
         IEnumerator _TimerCallBack()
         {

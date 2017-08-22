@@ -150,20 +150,28 @@ namespace SichuanDynasty
         {
             if (_isGameInit && _isGameStart && !_isGameOver) {
 
-                if (_isNextTurn) {
-                    _timer.StartCountDown();
-                    _isInitNextTurn = false;
-                    _isNextTurn = false;
-                }
+                if (!_isHasWinner) {
 
-                if (!_isInitNextTurn && !_timer.IsStarted && !_isHasWinner) {
-                    Debug.Log("Begin next turn..");
-                    _isInitNextTurn = true;
-                    StartCoroutine("_NextTurn");
-                }
+                    if (_isNextTurn) {
+                        _timer.Stop();
+                        _timer.StartCountDown();
+                        _isInitNextTurn = false;
+                        _isNextTurn = false;
+                    }
 
-                if (_timer.IsStarted && !_timer.IsFinished && !_isHasWinner) {
-                    _PhaseHandle();
+                    if (!_timer.IsStarted) {
+                        if (!_isInitNextTurn) {
+                            _NextTurn();
+                        }
+
+                    } else {
+                        if (!_timer.IsFinished) {
+                            _PhaseHandle();
+
+                        }
+                    }
+                } else {
+                    //GameOver
                 }
             }
         }
@@ -188,15 +196,40 @@ namespace SichuanDynasty
         {
             if (_currentPlayerIndex == 0) {
                 //Get Input if player want to be on next phase -> Battle
+                if (Input.GetButtonDown("Player1_Y")) {
+                    _NextPhase();
+                }
 
             } else if (_currentPlayerIndex == 1) {
                 //Get Input if player want to be on next phase -> Battle
+                if (Input.GetButtonDown("Player2_Y")) {
+                    _NextPhase();
+                }
 
             }
         }
 
         void _BattlePhaseHandle()
         {
+            if (_currentPlayerIndex == 0) {
+                if (Input.GetButtonDown("Player1_Y")) {
+                    //Next turn
+                    if (!_isInitNextTurn) {
+                        _NextTurn();
+                        _isInitNextTurn = true;
+                    }
+                }
+
+            } else if (_currentPlayerIndex == 1) {
+                if (Input.GetButtonDown("Player2_Y")) {
+                    //Next turn
+                    if (!_isInitNextTurn) {
+                        _NextTurn();
+                        _isInitNextTurn = true;
+                    }
+                }
+
+            }
         }
 
         void _Attack(int playerIndex)
@@ -211,7 +244,14 @@ namespace SichuanDynasty
         {
             if (_currentPhase == Phase.Shuffle) {
                 _currentPhase = Phase.Battle;
+
             }
+        }
+
+        void _NextTurn()
+        {
+            _isInitNextTurn = true;
+            StartCoroutine("_NextTurnCallBack");
         }
 
         void _ChangePlayer()
@@ -223,14 +263,15 @@ namespace SichuanDynasty
 
             _players[_currentPlayerIndex].SetTurn(true);
             eventSystem[_currentPlayerIndex].gameObject.SetActive(true);
+            eventSystem[_currentPlayerIndex].SetSelectedGameObject(firstSelectedCards[_currentPlayerIndex]);
         }
 
-        IEnumerator _NextTurn()
+        IEnumerator _NextTurnCallBack()
         {
             yield return new WaitForSeconds(0.8f);
             _totalTurn++;
-            _currentPhase = Phase.Shuffle;
             _ChangePlayer();
+            _currentPhase = Phase.Shuffle;
             _isNextTurn = true;
         }
     }
