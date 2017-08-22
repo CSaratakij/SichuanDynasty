@@ -41,6 +41,7 @@ namespace SichuanDynasty
             for (int i = 0; i < totalCard; i++) {
                 var index = (int)(Random.Range(0, _deck.Cards.Count - 1));
                 _fieldDeck.Cards.Add(_deck.Cards[index]);
+                _deck.Cards.RemoveAt(index);
             }
         }
 

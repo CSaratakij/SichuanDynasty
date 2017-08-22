@@ -57,10 +57,16 @@ namespace SichuanDynasty
         IEnumerator _TimerCallBack()
         {
             while (_timeLeft > 0.0f) {
-                yield return new WaitForSeconds(1.0f);
-                _timeLeft -= 1.0f;
-                if (_timeLeft <= 0.0f) {
-                    break;
+                if (_isPaused) {
+                    yield return null;
+
+                } else {
+                    yield return new WaitForSeconds(1.0f);
+
+                    _timeLeft -= 1.0f;
+                    if (_timeLeft <= 0.0f) {
+                        break;
+                    }
                 }
             }
 
