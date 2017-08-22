@@ -1,17 +1,29 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
-public class GamePadInTurnView : MonoBehaviour
+namespace SichuanDynasty.UI
 {
+    public class GamePadInTurnView : MonoBehaviour
+    {
+        [SerializeField]
+        GameController gameController;
 
-	// Use this for initialization
-	void Start () {
-		
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
+        [SerializeField]
+        GameObject[] imgAllHideOptions;
+
+
+        void Update()
+        {
+            if (gameController) {
+                if (gameController.IsGameInit && gameController.IsGameStart && !gameController.IsGameOver) {
+                    var isShow = (gameController.CurrentPhase == GameController.Phase.Battle);
+                    foreach (GameObject obj in imgAllHideOptions) {
+                        obj.SetActive(isShow);
+                    }
+                }
+            }
+        }
+    }
 }
