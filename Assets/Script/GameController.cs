@@ -283,6 +283,7 @@ namespace SichuanDynasty
             _isInitNextTurn = true;
             _isAttacked = false;
             _isHealed = false;
+            _timer.Stop();
             StartCoroutine("_NextTurnCallBack");
         }
 
