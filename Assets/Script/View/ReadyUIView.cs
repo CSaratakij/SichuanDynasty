@@ -88,7 +88,6 @@ namespace SichuanDynasty.UI
         {
             gameObject.SetActive(false);
             nextUI.SetActive(true);
-            gameController.GameStart();
             _isProcess = false;
         }
     }
