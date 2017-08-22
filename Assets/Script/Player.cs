@@ -22,9 +22,10 @@ namespace SichuanDynasty
         public Player()
         {
             _isTurn = false;
-            _deck = new Deck(1, 9);
-            _fieldDeck = new Deck(0, 0);
-            _selectedDeck = new Deck(0, 0);
+            _fieldDeck = new Deck();
+            _selectedDeck = new Deck();
+            _deck = new Deck();
+            _deck.AddCard(1, 9);
         }
 
         public void SetTurn(bool isTurn)

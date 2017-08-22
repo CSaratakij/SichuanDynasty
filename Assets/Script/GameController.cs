@@ -14,16 +14,33 @@ namespace SichuanDynasty
         public bool IsGameOver { get { return _isGameOver; } }
 
 
+        public enum Phase
+        {
+            None,
+            Shuffle,
+            Battle
+        }
+
+
+        int _currentPlayerIndex;
+
         bool _isGameInit;
         bool _isGameStart;
         bool _isGameOver;
 
 
+        Phase _currentPhase;
+        Player[] _players;
+
+
         public GameController()
         {
+            _currentPlayerIndex = 0;
             _isGameInit = false;
             _isGameStart = false;
             _isGameOver = true;
+            _currentPhase = Phase.None;
+            _players = new Player[MAX_PLAYER_SUPPORT];
         }
 
         public void GameReset()
@@ -47,6 +64,20 @@ namespace SichuanDynasty
         public void GameOver()
         {
             _isGameOver = true;
+        }
+
+        void Awake()
+        {
+            for (int i = 0; i < _players.Length; i++) {
+                _players[i] = gameObject.AddComponent(typeof(Player)) as Player;
+            }
+        }
+
+        void Update()
+        {
+            if (_isGameInit && _isGameStart && !_isGameOver) {
+                Debug.Log("Game is started..");
+            }
         }
     }
 }

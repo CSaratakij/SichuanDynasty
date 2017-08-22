@@ -205,6 +205,7 @@ namespace SichuanDynasty.UI
             yield return new WaitForSeconds(2.0f);
             gameObject.SetActive(false);
             nextUI.SetActive(true);
+            gameController.GameStart();
         }
     }
 }
