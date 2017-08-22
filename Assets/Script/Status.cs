@@ -6,17 +6,17 @@ namespace SichuanDynasty
 {
     public class Status
     {
-        float _current;
-        float _max;
-        float _min;
+        int _current;
+        int _max;
+        int _min;
 
 
-        public float Current { get { return _current; } }
-        public float Max { get { return _max; } }
-        public float Min { get { return _min; } }
+        public int Current { get { return _current; } }
+        public int Max { get { return _max; } }
+        public int Min { get { return _min; } }
 
 
-        public Status(float min, float max)
+        public Status(int min, int max)
         {
             _min = min;
             _max = max;
@@ -34,12 +34,12 @@ namespace SichuanDynasty
             _current = _min;
         }
 
-        public void Restore(float value)
+        public void Restore(int value)
         {
             _current = ((_current + value) > _max) ? _max : _current + value;
         }
 
-        public void Remove(float value)
+        public void Remove(int value)
         {
             _current = ((_current - value) < _min) ? _min : _current - value;
         }

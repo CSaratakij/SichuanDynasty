@@ -16,10 +16,10 @@ namespace SichuanDynasty
 
 
         public const int MAX_PLAYER_SUPPORT = 2;
+        public const int MAX_PLAYER_HEALTH_PER_GAME = 30;
         public const int MAX_PHASE_PER_PLAYER = 2;
         public const int MAX_FIELD_CARD_PER_GAME = 4;
         public const float MAX_TIME_PER_PHASE = 60.0f;
-        public const float MAX_PLAYER_HEALTH_PER_GAME = 30.0f;
 
         public bool IsGameInit { get { return _isGameInit; } }
         public bool IsGameStart { get { return _isGameStart; } }
@@ -227,9 +227,15 @@ namespace SichuanDynasty
 
                 } else if (Input.GetButtonDown("Player1_X")) {
                     if (!_isAttacked) {
-                        _Attack();
+                        _Attack(_currentPlayerIndex);
                         _isAttacked = true;
                     }
+                } else if (Input.GetButtonDown("Player1_B")) {
+                    if (!_isHealed) {
+                        _Heal(_currentPlayerIndex);
+                        _isHealed = true;
+                    }
+
                 }
 
             } else if (_currentPlayerIndex == 1) {
@@ -241,9 +247,16 @@ namespace SichuanDynasty
 
                 } else if (Input.GetButtonDown("Player2_X")) {
                     if (!_isAttacked) {
-                        _Attack();
+                        _Attack(_currentPlayerIndex);
                         _isAttacked = true;
                     }
+
+                } else if (Input.GetButtonDown("Player2_B")) {
+                    if (!_isHealed) {
+                        _Heal(_currentPlayerIndex);
+                        _isHealed = true;
+                    }
+
                 }
 
             }

@@ -11,6 +11,7 @@ namespace SichuanDynasty
         Deck _deck;
         Deck _fieldDeck;
         Deck _selectedDeck;
+        Deck _disableDeck;
 
         Status _health;
 
@@ -18,6 +19,7 @@ namespace SichuanDynasty
         public Deck NormalDeck { get { return _deck; } }
         public Deck FieldDeck { get { return _fieldDeck; } }
         public Deck SelectedDeck { get { return _selectedDeck; } }
+        public Deck DisableDeck { get { return _disableDeck; } }
         public Status Health { get { return _health; } }
 
 
@@ -27,8 +29,9 @@ namespace SichuanDynasty
             _fieldDeck = new Deck();
             _selectedDeck = new Deck();
             _deck = new Deck();
+            _disableDeck = new Deck();
             _deck.AddCards(1, 9);
-            _health = new Status(0.0f, GameController.MAX_PLAYER_HEALTH_PER_GAME);
+            _health = new Status(0, GameController.MAX_PLAYER_HEALTH_PER_GAME);
         }
 
         public void SetTurn(bool isTurn)
