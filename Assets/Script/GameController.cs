@@ -36,6 +36,9 @@ namespace SichuanDynasty
 
         public Player[] Players { get { return _players; } }
 
+        public int[] FieldCardCache_1 { get { return _fieldCache_1; } }
+        public int[] FieldCardCache_2 { get { return _fieldCache_2; } }
+
 
         public enum Phase
         {
@@ -58,10 +61,6 @@ namespace SichuanDynasty
         bool _isHasWinner;
 
         bool _isInitNextTurn;
-
-        bool _isAttacked;
-        bool _isHealed;
-
         bool _isInteractable;
 
         Phase _currentPhase;
@@ -71,6 +70,9 @@ namespace SichuanDynasty
 
 
         List<int> _currentSelectedCardCache;
+
+        int[] _fieldCache_1;
+        int[] _fieldCache_2;
 
 
         public GameController()
@@ -84,12 +86,12 @@ namespace SichuanDynasty
             _isNextTurn = false;
             _isHasWinner = false;
             _isInitNextTurn = false;
-            _isAttacked = false;
-            _isHealed = false;
             _isInteractable = true;
             _currentPhase = Phase.None;
             _players = new Player[MAX_PLAYER_SUPPORT];
             _currentSelectedCardCache = new List<int>();
+            _fieldCache_1 = new int[MAX_FIELD_CARD_PER_GAME];
+            _fieldCache_2 = new int[MAX_FIELD_CARD_PER_GAME];
         }
 
         public void ExitGame()
@@ -120,6 +122,9 @@ namespace SichuanDynasty
             foreach (Player player in _players) {
                 player.FirstDraw(MAX_FIELD_CARD_PER_GAME);
             }
+
+            _fieldCache_1 = _players[0].FieldDeck.Cards.ToArray();
+            _fieldCache_2 = _players[1].FieldDeck.Cards.ToArray();
 
             eventSystem[0].gameObject.SetActive(false);
             eventSystem[_currentPlayerIndex].gameObject.SetActive(true);
@@ -154,7 +159,15 @@ namespace SichuanDynasty
         public void ToggleSelect(int index)
         {
             var targetPlayer = _players[_currentPlayerIndex];
-            var targetCard = targetPlayer.FieldDeck.Cards[index];
+            var targetCard = 0;
+
+            if (_currentPlayerIndex == 0) {
+                targetCard = _fieldCache_1[index];
+
+            } else if (_currentPlayerIndex == 1) {
+                targetCard = _fieldCache_2[index];
+
+            }
 
             switch (_currentPhase) {
                 case Phase.Shuffle:
@@ -165,6 +178,14 @@ namespace SichuanDynasty
 
                     targetPlayer.FieldDeck.Cards.Add(newCard);
                     targetPlayer.NormalDeck.Cards.Remove(newCard);
+
+                    if (_currentPlayerIndex == 0) {
+                        _fieldCache_1 = targetPlayer.FieldDeck.Cards.ToArray();
+
+                    } else if (_currentPlayerIndex == 1) {
+                        _fieldCache_2 = targetPlayer.FieldDeck.Cards.ToArray();
+                    }
+
                 break;
 
                 case Phase.Battle:
@@ -175,6 +196,7 @@ namespace SichuanDynasty
                         _currentSelectedCardCache.Add(targetCard);
 
                     }
+
                 break;
 
                 default:
@@ -275,15 +297,10 @@ namespace SichuanDynasty
                     }
 
                 } else if (Input.GetButtonDown("Player1_X")) {
-                    /* if (!_isAttacked) { */
                         _Attack(1);
-                        _isAttacked = true;
-                    /* } */
+
                 } else if (Input.GetButtonDown("Player1_B")) {
-                    /* if (!_isHealed) { */
                         _Heal(0);
-                        _isHealed = true;
-                    /* } */
 
                 }
 
@@ -295,19 +312,12 @@ namespace SichuanDynasty
                     }
 
                 } else if (Input.GetButtonDown("Player2_X")) {
-                    /* if (!_isAttacked) { */
                         _Attack(0);
-                        _isAttacked = true;
-                    /* } */
 
                 } else if (Input.GetButtonDown("Player2_B")) {
-                    /* if (!_isHealed) { */
                         _Heal(1);
-                        _isHealed = true;
-                    /* } */
 
                 }
-
             }
         }
 
@@ -342,14 +352,36 @@ namespace SichuanDynasty
             foreach (int point in _currentSelectedCardCache) {
                 totalPoint += point;
             }
+
             return totalPoint <= _players[targetIndex].Health.Current;
         }
 
         void _Heal(int targetIndex)
         {
-            //Health logic..
+            var isHealable = IsHealable();
 
+            if (isHealable) {
+                _SetActivateCard(_currentPlayerIndex, false);
+                var totalPoint = 0;
 
+                foreach (int point in _currentSelectedCardCache) {
+                    totalPoint += point;
+                }
+
+                _currentSelectedCardCache.Clear();
+
+                _players[targetIndex].Health.Restore(totalPoint);
+                _ReHightlightCard();
+            }
+        }
+
+        bool IsHealable()
+        {
+            var totalPoint = 0;
+            foreach (int point in _currentSelectedCardCache) {
+                totalPoint += point;
+            }
+            return totalPoint <= MAX_PLAYER_HEALTH_PER_GAME;
         }
 
         void _CheckWinner()
@@ -387,13 +419,18 @@ namespace SichuanDynasty
                 _players[_currentPlayerIndex].FieldDeck.Cards.Add(newCard);
                 _players[_currentPlayerIndex].NormalDeck.Cards.Remove(newCard);
             }
+
+            if (_currentPlayerIndex == 0) {
+                _fieldCache_1 = _players[_currentPlayerIndex].FieldDeck.Cards.ToArray();
+
+            } else if (_currentPlayerIndex == 1) {
+                _fieldCache_2 = _players[_currentPlayerIndex].FieldDeck.Cards.ToArray();
+            }
         }
 
         void _NextTurn()
         {
             _isInitNextTurn = true;
-            _isAttacked = false;
-            _isHealed = false;
             _timer.Stop();
             StartCoroutine("_NextTurnCallBack");
         }

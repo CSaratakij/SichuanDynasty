@@ -23,14 +23,6 @@ namespace SichuanDynasty.UI
 
                 if (gameController.IsGameInit && gameController.IsGameStart && !gameController.IsGameOver) {
 
-                    if (gameController.Players[playerIndex].SelectedDeck.Cards.Count > 0) {
-                        gameObject.SetActive(true);
-                        txtCardNum.text = gameController.Players[playerIndex].SelectedDeck.Cards[0].ToString();
-
-                    } else {
-                        gameObject.SetActive(false);
-
-                    }
                 }
             }
         }

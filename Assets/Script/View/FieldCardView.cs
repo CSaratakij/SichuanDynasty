@@ -56,8 +56,12 @@ namespace SichuanDynasty.UI
             if (gameController) {
 
                 if (gameController.IsGameInit && gameController.IsGameStart && !gameController.IsGameOver) {
-                    if (fieldCardIndex <= gameController.Players[playerIndex].FieldDeck.Cards.Count - 1) {
-                        txtCard.text = gameController.Players[playerIndex].FieldDeck.Cards[fieldCardIndex].ToString();
+
+                    if (playerIndex == 0) {
+                        txtCard.text = gameController.FieldCardCache_1[fieldCardIndex].ToString();
+
+                    } else if (playerIndex == 1) {
+                        txtCard.text = gameController.FieldCardCache_2[fieldCardIndex].ToString();
                     }
 
                     imgCard.sprite = (_isSelected) ? imgAllCardState[1] : imgAllCardState[0];
