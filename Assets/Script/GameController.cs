@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using SichuanDynasty.UI;
 
 namespace SichuanDynasty
 {
@@ -13,6 +14,9 @@ namespace SichuanDynasty
 
         [SerializeField]
         EventSystem[] eventSystem;
+
+        [SerializeField]
+        GameObject[] parentCards;
 
 
         public const int MAX_PLAYER_SUPPORT = 2;
@@ -225,7 +229,7 @@ namespace SichuanDynasty
 
                 } else {
                     GameOver();
-
+                    _timer.Stop();
                 }
             }
         }
@@ -271,15 +275,15 @@ namespace SichuanDynasty
                     }
 
                 } else if (Input.GetButtonDown("Player1_X")) {
-                    if (!_isAttacked) {
+                    /* if (!_isAttacked) { */
                         _Attack(1);
                         _isAttacked = true;
-                    }
+                    /* } */
                 } else if (Input.GetButtonDown("Player1_B")) {
-                    if (!_isHealed) {
+                    /* if (!_isHealed) { */
                         _Heal(0);
                         _isHealed = true;
-                    }
+                    /* } */
 
                 }
 
@@ -291,32 +295,54 @@ namespace SichuanDynasty
                     }
 
                 } else if (Input.GetButtonDown("Player2_X")) {
-                    if (!_isAttacked) {
+                    /* if (!_isAttacked) { */
                         _Attack(0);
                         _isAttacked = true;
-                    }
+                    /* } */
 
                 } else if (Input.GetButtonDown("Player2_B")) {
-                    if (!_isHealed) {
+                    /* if (!_isHealed) { */
                         _Heal(1);
                         _isHealed = true;
-                    }
+                    /* } */
 
                 }
 
             }
         }
 
-        //Fix this -> Can't attack..
         void _Attack(int targetIndex)
         {
-            var totalPoint = 0;
-            for (int i = 0; i < _currentSelectedCardCache.Count; i++) {
-                _players[_currentPlayerIndex].FieldDeck.Cards.Remove(_currentSelectedCardCache[i]);
-                _players[_currentPlayerIndex].SelectedDeck.Cards.Add(_currentSelectedCardCache[i]);
-                totalPoint += _currentSelectedCardCache[i];
+            var isAttakAble = IsAttackAble(targetIndex);
+
+            if (isAttakAble) {
+
+                _SetActivateCard(_currentPlayerIndex, false);
+                var totalPoint = 0;
+
+                for (int i = 0; i < _currentSelectedCardCache.Count; i++) {
+                    totalPoint += _currentSelectedCardCache[i];
+
+                    _players[_currentPlayerIndex].DisableDeck.Cards.Add(_currentSelectedCardCache[i]);
+                    _players[_currentPlayerIndex].FieldDeck.Cards.Remove(_currentSelectedCardCache[i]);
+
+                }
+
+                _currentSelectedCardCache.Clear();
+                _players[targetIndex].Health.Remove(totalPoint);
+
+                _CheckWinner();
+                _ReHightlightCard();
             }
-            _players[targetIndex].Health.Remove(totalPoint);
+        }
+
+        bool IsAttackAble(int targetIndex)
+        {
+            var totalPoint = 0;
+            foreach (int point in _currentSelectedCardCache) {
+                totalPoint += point;
+            }
+            return totalPoint <= _players[targetIndex].Health.Current;
         }
 
         void _Heal(int targetIndex)
@@ -324,6 +350,43 @@ namespace SichuanDynasty
             //Health logic..
 
 
+        }
+
+        void _CheckWinner()
+        {
+            foreach (Player player in _players) {
+                if (player.Health.Current <= 0) {
+                    _isHasWinner = true;
+                    break;
+                }
+            }
+        }
+
+        void _SetActivateCard(int playerIndex, bool isActivate)
+        {
+            foreach (Transform cardObj in parentCards[_currentPlayerIndex].gameObject.transform) {
+                var view = cardObj.gameObject.GetComponent<FieldCardView>();
+                if (view.IsSelected) {
+                    cardObj.gameObject.SetActive(isActivate);
+                }
+            }
+        }
+
+        void _DrawNewCard()
+        {
+            for (int i = 0; i < _players[_currentPlayerIndex].DisableDeck.Cards.Count; i++) {
+                _players[_currentPlayerIndex].NormalDeck.Cards.Add(_players[_currentPlayerIndex].DisableDeck.Cards[i]);
+            }
+
+            _players[_currentPlayerIndex].DisableDeck.Cards.Clear();
+
+            var totalDraw = MAX_FIELD_CARD_PER_GAME - _players[_currentPlayerIndex].FieldDeck.Cards.Count;
+
+            for (int i = 0; i < totalDraw; i++) {
+                var newCard = _players[_currentPlayerIndex].NormalDeck.Cards[0];
+                _players[_currentPlayerIndex].FieldDeck.Cards.Add(newCard);
+                _players[_currentPlayerIndex].NormalDeck.Cards.Remove(newCard);
+            }
         }
 
         void _NextTurn()
@@ -350,10 +413,21 @@ namespace SichuanDynasty
             eventSystem[_currentPlayerIndex].SetSelectedGameObject(firstSelectedCards[_currentPlayerIndex]);
         }
 
+        void _ReHightlightCard()
+        {
+            foreach (Transform cardObj in parentCards[_currentPlayerIndex].gameObject.transform) {
+                if (cardObj.gameObject.activeSelf) {
+                    eventSystem[_currentPlayerIndex].SetSelectedGameObject(cardObj.gameObject);
+                }
+            }
+        }
+
         IEnumerator _NextTurnCallBack()
         {
             yield return new WaitForSeconds(0.8f);
             _totalTurn++;
+            _DrawNewCard();
+            _SetActivateCard(_currentPlayerIndex, true);
             _ChangePlayer();
             _currentPhase = Phase.Shuffle;
             _isNextTurn = true;

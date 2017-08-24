@@ -26,6 +26,9 @@ namespace SichuanDynasty.UI
         Sprite[] imgAllCardState;
 
 
+        public bool IsSelected { get { return _isSelected; } }
+
+
         bool _isSelected;
 
 
@@ -40,7 +43,7 @@ namespace SichuanDynasty.UI
                 _isSelected = !_isSelected;
                 gameController.ToggleSelect(fieldCardIndex);
 
-                if (gameController.CurrentPhase == GameController.Phase.Shuffle) {
+                if (_isSelected && (gameController.CurrentPhase == GameController.Phase.Shuffle)) {
                     gameController.SetInteractable(false);
                     StartCoroutine("_ChangeToBattlePhase");
                 }
@@ -53,12 +56,17 @@ namespace SichuanDynasty.UI
             if (gameController) {
 
                 if (gameController.IsGameInit && gameController.IsGameStart && !gameController.IsGameOver) {
-                    txtCard.text = gameController.Players[playerIndex].FieldDeck.Cards[fieldCardIndex].ToString();
+                    if (fieldCardIndex <= gameController.Players[playerIndex].FieldDeck.Cards.Count - 1) {
+                        txtCard.text = gameController.Players[playerIndex].FieldDeck.Cards[fieldCardIndex].ToString();
+                    }
+
                     imgCard.sprite = (_isSelected) ? imgAllCardState[1] : imgAllCardState[0];
 
-                    if (_isSelected && (gameController.CurrentPhase == GameController.Phase.Shuffle)) {
-                        ToggleSelect();
-                        _isSelected = false;
+                    if (_isSelected) { 
+                        if (gameController.CurrentPhase == GameController.Phase.Shuffle) {
+                            ToggleSelect();
+                            _isSelected = false;
+                        }
                     }
                 }
             }

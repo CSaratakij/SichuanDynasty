@@ -336,6 +336,9 @@ MonoBehaviour:
   eventSystem:
   - {fileID: 639403121}
   - {fileID: 846656049}
+  parentCards:
+  - {fileID: 1557461258}
+  - {fileID: 1311392574}
 --- !u!114 &1121190401 stripped
 MonoBehaviour:
   m_PrefabParentObject: {fileID: 114514528522147398, guid: b4918e590fb25b841b0d724ca6e4f18b,
@@ -443,6 +446,11 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1311392574 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 1484216193611092, guid: b4918e590fb25b841b0d724ca6e4f18b,
+    type: 2}
+  m_PrefabInternal: {fileID: 1422979395}
 --- !u!114 &1329728218 stripped
 MonoBehaviour:
   m_PrefabParentObject: {fileID: 114865529830302506, guid: b4918e590fb25b841b0d724ca6e4f18b,
@@ -1147,6 +1155,11 @@ Prefab:
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: b4918e590fb25b841b0d724ca6e4f18b, type: 2}
   m_IsPrefabParent: 0
+--- !u!1 &1557461258 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 1768680458484806, guid: b4918e590fb25b841b0d724ca6e4f18b,
+    type: 2}
+  m_PrefabInternal: {fileID: 1422979395}
 --- !u!1 &1708306611 stripped
 GameObject:
   m_PrefabParentObject: {fileID: 1657351917565866, guid: b4918e590fb25b841b0d724ca6e4f18b,
