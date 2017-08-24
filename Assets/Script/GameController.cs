@@ -25,6 +25,7 @@ namespace SichuanDynasty
         public bool IsGameStart { get { return _isGameStart; } }
         public bool IsGameOver { get { return _isGameOver; } }
         public bool IsGamePause { get { return _isGamePause; } }
+        public bool IsInteractable { get { return _isInteractable; } }
 
         public int TotalTurn { get { return _totalTurn; } }
         public Phase CurrentPhase { get { return _currentPhase; } }
@@ -57,6 +58,8 @@ namespace SichuanDynasty
         bool _isAttacked;
         bool _isHealed;
 
+        bool _isInteractable;
+
         Phase _currentPhase;
 
         Player[] _players;
@@ -68,7 +71,6 @@ namespace SichuanDynasty
 
         public GameController()
         {
-            _firstPlayerIndex = 0;
             _currentPlayerIndex = 0;
             _totalTurn = 0;
             _isGameInit = false;
@@ -80,6 +82,7 @@ namespace SichuanDynasty
             _isInitNextTurn = false;
             _isAttacked = false;
             _isHealed = false;
+            _isInteractable = true;
             _currentPhase = Phase.None;
             _players = new Player[MAX_PLAYER_SUPPORT];
             _currentSelectedCardCache = new List<int>();
@@ -106,7 +109,6 @@ namespace SichuanDynasty
         public void GameStart(int firstPlayerIndex)
         {
             _isNextTurn = true;
-            _firstPlayerIndex = firstPlayerIndex;
             _currentPlayerIndex = firstPlayerIndex;
             _players[firstPlayerIndex].SetTurn(true);
             _currentPhase = Phase.Shuffle;
@@ -133,9 +135,52 @@ namespace SichuanDynasty
             Time.timeScale = (_isGamePause) ? 0.0f : 1.0f;
         }
 
-        public void SetFirstStarter(int index)
+        public void NextPhase()
         {
-            _firstPlayerIndex = index;
+            if (_currentPhase == Phase.Shuffle) {
+                _currentPhase = Phase.Battle;
+            }
+
+            SetInteractable(true);
+            _currentSelectedCardCache.Clear();
+            _players[_currentPlayerIndex].SelectedDeck.Cards.Clear();
+        }
+
+
+        public void ToggleSelect(int index)
+        {
+            var targetPlayer = _players[_currentPlayerIndex];
+            var targetCard = targetPlayer.FieldDeck.Cards[index];
+
+            switch (_currentPhase) {
+                case Phase.Shuffle:
+                    targetPlayer.NormalDeck.Cards.Add(targetCard);
+                    targetPlayer.FieldDeck.Cards.Remove(targetCard);
+
+                    var newCard = targetPlayer.NormalDeck.Cards[0];
+
+                    targetPlayer.FieldDeck.Cards.Add(newCard);
+                    targetPlayer.NormalDeck.Cards.Remove(newCard);
+                break;
+
+                case Phase.Battle:
+                    if (_currentSelectedCardCache.Contains(targetCard)) {
+                        _currentSelectedCardCache.Remove(targetCard);
+
+                    } else {
+                        _currentSelectedCardCache.Add(targetCard);
+
+                    }
+                break;
+
+                default:
+                break;
+            }
+        }
+
+        public void SetInteractable(bool value)
+        {
+            _isInteractable = value;
         }
 
 
@@ -205,12 +250,12 @@ namespace SichuanDynasty
         {
             if (_currentPlayerIndex == 0) {
                 if (Input.GetButtonDown("Player1_Y")) {
-                    _NextPhase();
+                    NextPhase();
                 } 
 
             } else if (_currentPlayerIndex == 1) {
                 if (Input.GetButtonDown("Player2_Y")) {
-                    _NextPhase();
+                    NextPhase();
                 }
 
             }
@@ -227,12 +272,12 @@ namespace SichuanDynasty
 
                 } else if (Input.GetButtonDown("Player1_X")) {
                     if (!_isAttacked) {
-                        _Attack(_currentPlayerIndex);
+                        _Attack(1);
                         _isAttacked = true;
                     }
                 } else if (Input.GetButtonDown("Player1_B")) {
                     if (!_isHealed) {
-                        _Heal(_currentPlayerIndex);
+                        _Heal(0);
                         _isHealed = true;
                     }
 
@@ -247,13 +292,13 @@ namespace SichuanDynasty
 
                 } else if (Input.GetButtonDown("Player2_X")) {
                     if (!_isAttacked) {
-                        _Attack(_currentPlayerIndex);
+                        _Attack(0);
                         _isAttacked = true;
                     }
 
                 } else if (Input.GetButtonDown("Player2_B")) {
                     if (!_isHealed) {
-                        _Heal(_currentPlayerIndex);
+                        _Heal(1);
                         _isHealed = true;
                     }
 
@@ -262,20 +307,23 @@ namespace SichuanDynasty
             }
         }
 
-        void _Attack(int playerIndex)
+        //Fix this -> Can't attack..
+        void _Attack(int targetIndex)
         {
-        }
-
-        void _Heal(int playerIndex)
-        {
-        }
-
-        void _NextPhase()
-        {
-            if (_currentPhase == Phase.Shuffle) {
-                _currentPhase = Phase.Battle;
-
+            var totalPoint = 0;
+            for (int i = 0; i < _currentSelectedCardCache.Count; i++) {
+                _players[_currentPlayerIndex].FieldDeck.Cards.Remove(_currentSelectedCardCache[i]);
+                _players[_currentPlayerIndex].SelectedDeck.Cards.Add(_currentSelectedCardCache[i]);
+                totalPoint += _currentSelectedCardCache[i];
             }
+            _players[targetIndex].Health.Remove(totalPoint);
+        }
+
+        void _Heal(int targetIndex)
+        {
+            //Health logic..
+
+
         }
 
         void _NextTurn()
@@ -289,6 +337,9 @@ namespace SichuanDynasty
 
         void _ChangePlayer()
         {
+            _currentSelectedCardCache.Clear();
+            _players[_currentPlayerIndex].SelectedDeck.Cards.Clear();
+
             _players[_currentPlayerIndex].SetTurn(false);
             eventSystem[_currentPlayerIndex].gameObject.SetActive(false);
 
