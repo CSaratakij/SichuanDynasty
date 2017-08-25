@@ -62,14 +62,16 @@ namespace SichuanDynasty.UI
 
                     } else if (playerIndex == 1) {
                         txtCard.text = gameController.FieldCardCache_2[fieldCardIndex].ToString();
+
                     }
 
                     imgCard.sprite = (_isSelected) ? imgAllCardState[1] : imgAllCardState[0];
 
-                    if (_isSelected) { 
+                    if (_isSelected) {
+
                         if (gameController.CurrentPhase == GameController.Phase.Shuffle) {
-                            ToggleSelect();
                             _isSelected = false;
+
                         }
                     }
                 }

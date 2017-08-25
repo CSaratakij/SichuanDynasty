@@ -47,10 +47,5 @@ namespace SichuanDynasty
                 _deck.Cards.RemoveAt(index);
             }
         }
-
-        public void RandomFieldCard(int totalCard)
-        {
-
-        }
     }
 }

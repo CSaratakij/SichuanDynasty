@@ -25,6 +25,7 @@ namespace SichuanDynasty
         public const int MAX_FIELD_CARD_PER_GAME = 4;
         public const float MAX_TIME_PER_PHASE = 60.0f;
 
+
         public bool IsGameInit { get { return _isGameInit; } }
         public bool IsGameStart { get { return _isGameStart; } }
         public bool IsGameOver { get { return _isGameOver; } }
@@ -114,7 +115,6 @@ namespace SichuanDynasty
 
         public void GameStart(int firstPlayerIndex)
         {
-            _isNextTurn = true;
             _currentPlayerIndex = firstPlayerIndex;
             _players[firstPlayerIndex].SetTurn(true);
             _currentPhase = Phase.Shuffle;
@@ -123,14 +123,15 @@ namespace SichuanDynasty
                 player.FirstDraw(MAX_FIELD_CARD_PER_GAME);
             }
 
-            _fieldCache_1 = _players[0].FieldDeck.Cards.ToArray();
-            _fieldCache_2 = _players[1].FieldDeck.Cards.ToArray();
-
             eventSystem[0].gameObject.SetActive(false);
             eventSystem[_currentPlayerIndex].gameObject.SetActive(true);
             eventSystem[_currentPlayerIndex].SetSelectedGameObject(firstSelectedCards[_currentPlayerIndex]);
 
+            _fieldCache_1 = _players[0].FieldDeck.Cards.ToArray();
+            _fieldCache_2 = _players[1].FieldDeck.Cards.ToArray();
+
             _isGameStart = true;
+            _isNextTurn = true;
         }
 
         public void GameOver()
@@ -154,7 +155,6 @@ namespace SichuanDynasty
             _currentSelectedCardCache.Clear();
             _players[_currentPlayerIndex].SelectedDeck.Cards.Clear();
         }
-
 
         public void ToggleSelect(int index)
         {
@@ -184,6 +184,7 @@ namespace SichuanDynasty
 
                     } else if (_currentPlayerIndex == 1) {
                         _fieldCache_2 = targetPlayer.FieldDeck.Cards.ToArray();
+
                     }
 
                 break;
@@ -215,6 +216,7 @@ namespace SichuanDynasty
             for (int i = 0; i < _players.Length; i++) {
                 _players[i] = gameObject.AddComponent(typeof(Player)) as Player;
             }
+
             _timer = gameObject.AddComponent(typeof(Timer)) as Timer;
             _timer.SetMaxTime(MAX_TIME_PER_PHASE);
         }
@@ -237,12 +239,7 @@ namespace SichuanDynasty
                         _isNextTurn = false;
                     }
 
-                    if (!_timer.IsStarted) {
-                        if (!_isInitNextTurn) {
-                            _NextTurn();
-                        }
-
-                    } else {
+                    if (_timer.IsStarted) {
                         if (!_timer.IsFinished) {
                             _PhaseHandle();
 
@@ -252,6 +249,7 @@ namespace SichuanDynasty
                 } else {
                     GameOver();
                     _timer.Stop();
+
                 }
             }
         }
@@ -261,10 +259,12 @@ namespace SichuanDynasty
             switch (_currentPhase) {
                 case Phase.Shuffle:
                     _ShufflePhaseHandle();
+
                 break;
 
                 case Phase.Battle:
                     _BattlePhaseHandle();
+
                 break;
 
                 default:
@@ -321,6 +321,14 @@ namespace SichuanDynasty
             }
         }
 
+        void _MoveUsedCard()
+        {
+            for (int i = 0; i < _currentSelectedCardCache.Count; i++) {
+                _players[_currentPlayerIndex].DisableDeck.Cards.Add(_currentSelectedCardCache[i]);
+                _players[_currentPlayerIndex].FieldDeck.Cards.Remove(_currentSelectedCardCache[i]);
+            }
+        }
+
         void _Attack(int targetIndex)
         {
             var isAttakAble = IsAttackAble(targetIndex);
@@ -328,15 +336,14 @@ namespace SichuanDynasty
             if (isAttakAble) {
 
                 _SetActivateCard(_currentPlayerIndex, false);
-                var totalPoint = 0;
 
+                var totalPoint = 0;
                 for (int i = 0; i < _currentSelectedCardCache.Count; i++) {
                     totalPoint += _currentSelectedCardCache[i];
 
-                    _players[_currentPlayerIndex].DisableDeck.Cards.Add(_currentSelectedCardCache[i]);
-                    _players[_currentPlayerIndex].FieldDeck.Cards.Remove(_currentSelectedCardCache[i]);
-
                 }
+
+                _MoveUsedCard();
 
                 _currentSelectedCardCache.Clear();
                 _players[targetIndex].Health.Remove(totalPoint);
@@ -368,6 +375,7 @@ namespace SichuanDynasty
                     totalPoint += point;
                 }
 
+                _MoveUsedCard();
                 _currentSelectedCardCache.Clear();
 
                 _players[targetIndex].Health.Restore(totalPoint);
@@ -381,6 +389,7 @@ namespace SichuanDynasty
             foreach (int point in _currentSelectedCardCache) {
                 totalPoint += point;
             }
+
             return totalPoint <= MAX_PLAYER_HEALTH_PER_GAME;
         }
 
@@ -396,7 +405,7 @@ namespace SichuanDynasty
 
         void _SetActivateCard(int playerIndex, bool isActivate)
         {
-            foreach (Transform cardObj in parentCards[_currentPlayerIndex].gameObject.transform) {
+            foreach (Transform cardObj in parentCards[playerIndex].gameObject.transform) {
                 var view = cardObj.gameObject.GetComponent<FieldCardView>();
                 if (view.IsSelected) {
                     cardObj.gameObject.SetActive(isActivate);
@@ -404,27 +413,30 @@ namespace SichuanDynasty
             }
         }
 
-        void _DrawNewCard()
+        void _DrawNewCard(int playerIndex)
         {
-            for (int i = 0; i < _players[_currentPlayerIndex].DisableDeck.Cards.Count; i++) {
-                _players[_currentPlayerIndex].NormalDeck.Cards.Add(_players[_currentPlayerIndex].DisableDeck.Cards[i]);
+            for (int i = 0; i < _players[playerIndex].DisableDeck.Cards.Count; i++) {
+                _players[playerIndex].NormalDeck.Cards.Add(_players[playerIndex].DisableDeck.Cards[i]);
             }
 
-            _players[_currentPlayerIndex].DisableDeck.Cards.Clear();
+            _players[playerIndex].DisableDeck.Cards.Clear();
 
-            var totalDraw = MAX_FIELD_CARD_PER_GAME - _players[_currentPlayerIndex].FieldDeck.Cards.Count;
+            var totalDraw = MAX_FIELD_CARD_PER_GAME - _players[playerIndex].FieldDeck.Cards.Count;
 
             for (int i = 0; i < totalDraw; i++) {
-                var newCard = _players[_currentPlayerIndex].NormalDeck.Cards[0];
-                _players[_currentPlayerIndex].FieldDeck.Cards.Add(newCard);
-                _players[_currentPlayerIndex].NormalDeck.Cards.Remove(newCard);
+                var newCardIndex = (int)Random.Range(0, _players[playerIndex].NormalDeck.Cards.Count - 1);
+                var newCard = _players[playerIndex].NormalDeck.Cards[newCardIndex];
+
+                _players[playerIndex].FieldDeck.Cards.Add(newCard);
+                _players[playerIndex].NormalDeck.Cards.Remove(newCard);
             }
 
-            if (_currentPlayerIndex == 0) {
-                _fieldCache_1 = _players[_currentPlayerIndex].FieldDeck.Cards.ToArray();
+            if (playerIndex == 0) {
+                _fieldCache_1 = _players[playerIndex].FieldDeck.Cards.ToArray();
 
-            } else if (_currentPlayerIndex == 1) {
-                _fieldCache_2 = _players[_currentPlayerIndex].FieldDeck.Cards.ToArray();
+            } else if (playerIndex == 1) {
+                _fieldCache_2 = _players[playerIndex].FieldDeck.Cards.ToArray();
+
             }
         }
 
@@ -446,6 +458,7 @@ namespace SichuanDynasty
             _currentPlayerIndex = (_currentPlayerIndex == (_players.Length - 1)) ? 0 : _currentPlayerIndex + 1;
 
             _players[_currentPlayerIndex].SetTurn(true);
+
             eventSystem[_currentPlayerIndex].gameObject.SetActive(true);
             eventSystem[_currentPlayerIndex].SetSelectedGameObject(firstSelectedCards[_currentPlayerIndex]);
         }
@@ -463,7 +476,7 @@ namespace SichuanDynasty
         {
             yield return new WaitForSeconds(0.8f);
             _totalTurn++;
-            _DrawNewCard();
+            _DrawNewCard(_currentPlayerIndex);
             _SetActivateCard(_currentPlayerIndex, true);
             _ChangePlayer();
             _currentPhase = Phase.Shuffle;
