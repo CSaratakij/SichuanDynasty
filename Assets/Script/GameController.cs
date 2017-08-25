@@ -103,7 +103,7 @@ namespace SichuanDynasty
 
         public void Restart()
         {
-
+            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
         }
 
         public void GameReset()
@@ -249,6 +249,11 @@ namespace SichuanDynasty
                         if (!_timer.IsFinished) {
                             _PhaseHandle();
 
+                        }
+
+                    } else {
+                        if (_timer.IsFinished) {
+                            _NextTurn();
                         }
                     }
 

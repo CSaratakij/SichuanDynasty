@@ -1,6 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 namespace SichuanDynasty.UI
@@ -24,6 +26,12 @@ namespace SichuanDynasty.UI
 
         [SerializeField]
         GameObject gameplayUI;
+
+        [SerializeField]
+        EventSystem[] allEventSystem;
+
+        [SerializeField]
+        GameObject btnRestart;
 
 
         bool _isInitShowGameOver;
@@ -63,6 +71,7 @@ namespace SichuanDynasty.UI
                             if (!_isInitShowGameOver) {
                                 StartCoroutine("_ShowGameOverUI");
                                 _isInitShowGameOver = true;
+
                             }
                         }
                     }
@@ -75,6 +84,13 @@ namespace SichuanDynasty.UI
             yield return new WaitForSeconds(1.0f);
             gameplayUI.SetActive(false);
             gameOverUI.SetActive(true);
+
+            for (int i = 0; i < allEventSystem.Length; i++) {
+                allEventSystem[i].gameObject.SetActive(false);
+            }
+
+            allEventSystem[0].gameObject.SetActive(true);
+            allEventSystem[0].SetSelectedGameObject(btnRestart);
         }
     }
 }

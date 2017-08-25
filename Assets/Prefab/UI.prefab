@@ -2886,6 +2886,11 @@ MonoBehaviour:
   - {fileID: 114084516304928566}
   gameOverUI: {fileID: 1942415923795106}
   gameplayUI: {fileID: 1906783665965102}
+  allEventSystem:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  btnRestart: {fileID: 1975882781666208}
 --- !u!114 &114298343585773146
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -3934,7 +3939,7 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
-  m_Sprite: {fileID: 21300000, guid: 666d03f9002339d4891eb601c5ffdac1, type: 3}
+  m_Sprite: {fileID: 0}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -5028,7 +5033,7 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
-  m_Sprite: {fileID: 21300000, guid: 666d03f9002339d4891eb601c5ffdac1, type: 3}
+  m_Sprite: {fileID: 0}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
