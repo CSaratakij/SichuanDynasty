@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.SceneManagement;
 using SichuanDynasty.UI;
 
 namespace SichuanDynasty
@@ -98,6 +99,11 @@ namespace SichuanDynasty
         public void ExitGame()
         {
             Application.Quit();
+        }
+
+        public void Restart()
+        {
+
         }
 
         public void GameReset()
@@ -390,13 +396,24 @@ namespace SichuanDynasty
                 totalPoint += point;
             }
 
-            return totalPoint <= MAX_PLAYER_HEALTH_PER_GAME;
+            return (_players[_currentPlayerIndex].Health.Current + totalPoint) <= MAX_PLAYER_HEALTH_PER_GAME;
         }
 
         void _CheckWinner()
         {
-            foreach (Player player in _players) {
-                if (player.Health.Current <= 0) {
+            for (int i = 0; i < _players.Length; i++) {
+                if (_players[i].Health.Current <= 0) {
+
+                    if (i == 0) {
+                        _players[0].SetWin(false);
+                        _players[1].SetWin(true);
+
+                    } else if (i == 1) {
+                        _players[0].SetWin(true);
+                        _players[1].SetWin(false);
+
+                    }
+
                     _isHasWinner = true;
                     break;
                 }

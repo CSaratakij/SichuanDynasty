@@ -7,6 +7,7 @@ namespace SichuanDynasty
     public class Player : MonoBehaviour
     {
         bool _isTurn;
+        bool _isWin;
 
         Deck _deck;
         Deck _fieldDeck;
@@ -15,7 +16,9 @@ namespace SichuanDynasty
 
         Status _health;
 
+
         public bool IsTurn { get { return _isTurn; } }
+        public bool IsWin { get { return _isWin; } }
         public Deck NormalDeck { get { return _deck; } }
         public Deck FieldDeck { get { return _fieldDeck; } }
         public Deck SelectedDeck { get { return _selectedDeck; } }
@@ -26,6 +29,7 @@ namespace SichuanDynasty
         public Player()
         {
             _isTurn = false;
+            _isWin = false;
             _fieldDeck = new Deck();
             _selectedDeck = new Deck();
             _deck = new Deck();
@@ -37,6 +41,11 @@ namespace SichuanDynasty
         public void SetTurn(bool isTurn)
         {
             _isTurn = isTurn;
+        }
+
+        public void SetWin(bool value)
+        {
+            _isWin = value;
         }
 
         public void FirstDraw(int totalCard)

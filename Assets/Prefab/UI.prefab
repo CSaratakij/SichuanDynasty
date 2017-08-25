@@ -126,7 +126,7 @@ GameObject:
   - component: {fileID: 222290426069925160}
   - component: {fileID: 114542919493763784}
   m_Layer: 5
-  m_Name: imgLoose
+  m_Name: imgPlayer2_result
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -216,6 +216,23 @@ GameObject:
   - component: {fileID: 114998117135607822}
   m_Layer: 5
   m_Name: Text
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!1 &1125816872761850
+GameObject:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 224122570825198654}
+  - component: {fileID: 222911690386867096}
+  - component: {fileID: 114163548295869984}
+  m_Layer: 5
+  m_Name: txtTotalTurn
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1116,7 +1133,7 @@ GameObject:
   - component: {fileID: 222986949776963370}
   - component: {fileID: 114865310372363530}
   m_Layer: 5
-  m_Name: imgWin
+  m_Name: imgPlayer1_result
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1629,6 +1646,7 @@ GameObject:
   - component: {fileID: 224793695384143302}
   - component: {fileID: 222364935171927596}
   - component: {fileID: 114732564911970606}
+  - component: {fileID: 114320290078067932}
   m_Layer: 5
   m_Name: gameover
   m_TagString: Untagged
@@ -2198,6 +2216,10 @@ MonoBehaviour:
   fieldCardIndex: 2
   gameController: {fileID: 0}
   txtCard: {fileID: 114139627224299402}
+  imgCard: {fileID: 114120493769037034}
+  imgAllCardState:
+  - {fileID: 21300000, guid: aeecbbc2e9fe5a3458bf214830f57b88, type: 3}
+  - {fileID: 21300000, guid: a9ab05cc8003f6d41aa8831a3c6aba78, type: 3}
 --- !u!114 &114135169322080332
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2213,6 +2235,10 @@ MonoBehaviour:
   fieldCardIndex: 3
   gameController: {fileID: 0}
   txtCard: {fileID: 114040434705821472}
+  imgCard: {fileID: 114299959480899676}
+  imgAllCardState:
+  - {fileID: 21300000, guid: aeecbbc2e9fe5a3458bf214830f57b88, type: 3}
+  - {fileID: 21300000, guid: a9ab05cc8003f6d41aa8831a3c6aba78, type: 3}
 --- !u!114 &114139627224299402
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2285,7 +2311,18 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 114880394136764786}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 114514528522147398}
+        m_MethodName: ToggleSelect
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
 --- !u!114 &114156372254789652
@@ -2321,6 +2358,39 @@ MonoBehaviour:
     m_VerticalOverflow: 0
     m_LineSpacing: 1
   m_Text: 8
+--- !u!114 &114163548295869984
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1125816872761850}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 708705254, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 0, g: 0, b: 0, a: 1}
+  m_RaycastTarget: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
+      Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+  m_FontData:
+    m_Font: {fileID: 12800000, guid: 3419814cd23d9d940ab8b4f2c519dcc4, type: 3}
+    m_FontSize: 26
+    m_FontStyle: 0
+    m_BestFit: 1
+    m_MinSize: 2
+    m_MaxSize: 40
+    m_Alignment: 1
+    m_AlignByGeometry: 0
+    m_RichText: 1
+    m_HorizontalOverflow: 0
+    m_VerticalOverflow: 0
+    m_LineSpacing: 1
+  m_Text: 0
 --- !u!114 &114175330230999794
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2619,7 +2689,18 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 114344863082764822}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 114855446639473274}
+        m_MethodName: ToggleSelect
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
 --- !u!114 &114237331928734104
@@ -2795,6 +2876,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0ffa58647a5b03148af1a30d5af69c83, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  gameController: {fileID: 0}
+  pausePanel: {fileID: 1657351917565866}
+  disableDecksView:
+  - {fileID: 1951784261345672}
+  - {fileID: 1039520560057748}
+  txtCardNum:
+  - {fileID: 114300569747396490}
+  - {fileID: 114084516304928566}
+  gameOverUI: {fileID: 1942415923795106}
+  gameplayUI: {fileID: 1906783665965102}
 --- !u!114 &114298343585773146
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2834,7 +2925,18 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 114069977991904728}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 114788844836717732}
+        m_MethodName: ToggleSelect
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
 --- !u!114 &114299959480899676
@@ -2963,7 +3065,18 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 114072932697784016}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 114611668863037658}
+        m_MethodName: ToggleSelect
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
 --- !u!114 &114319249369409414
@@ -2993,6 +3106,25 @@ MonoBehaviour:
   m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0
+--- !u!114 &114320290078067932
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1942415923795106}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7f44fc16fee7c564fb354b2a218b539d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  gameController: {fileID: 0}
+  imgResults:
+  - {fileID: 114865310372363530}
+  - {fileID: 114542919493763784}
+  spriteAllResults:
+  - {fileID: 21300000, guid: 461febcbc6cfa19488c64c11efbc91ed, type: 3}
+  - {fileID: 21300000, guid: 666d03f9002339d4891eb601c5ffdac1, type: 3}
+  txtTotalTurn: {fileID: 114163548295869984}
 --- !u!114 &114323188986063098
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -3167,7 +3299,18 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 114415105655722418}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 114555084219224888}
+        m_MethodName: ToggleSelect
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
 --- !u!114 &114379293688424290
@@ -3368,6 +3511,28 @@ MonoBehaviour:
           m_BoolArgument: 0
         m_CallState: 2
       - m_Target: {fileID: 1430717730967396}
+        m_MethodName: SetActive
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 1
+        m_CallState: 2
+      - m_Target: {fileID: 0}
+        m_MethodName: SetActive
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 0}
         m_MethodName: SetActive
         m_Mode: 6
         m_Arguments:
@@ -3630,7 +3795,18 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 114860218479731386}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 114865529830302506}
+        m_MethodName: ToggleSelect
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
 --- !u!114 &114501036176383732
@@ -3675,6 +3851,10 @@ MonoBehaviour:
   fieldCardIndex: 2
   gameController: {fileID: 0}
   txtCard: {fileID: 114998117135607822}
+  imgCard: {fileID: 114526292303880172}
+  imgAllCardState:
+  - {fileID: 21300000, guid: aeecbbc2e9fe5a3458bf214830f57b88, type: 3}
+  - {fileID: 21300000, guid: a9ab05cc8003f6d41aa8831a3c6aba78, type: 3}
 --- !u!114 &114526292303880172
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -3804,6 +3984,10 @@ MonoBehaviour:
   fieldCardIndex: 1
   gameController: {fileID: 0}
   txtCard: {fileID: 114156372254789652}
+  imgCard: {fileID: 114826052564474320}
+  imgAllCardState:
+  - {fileID: 21300000, guid: aeecbbc2e9fe5a3458bf214830f57b88, type: 3}
+  - {fileID: 21300000, guid: a9ab05cc8003f6d41aa8831a3c6aba78, type: 3}
 --- !u!114 &114555401738923318
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -4043,6 +4227,10 @@ MonoBehaviour:
   fieldCardIndex: 3
   gameController: {fileID: 0}
   txtCard: {fileID: 114628229109164966}
+  imgCard: {fileID: 114347831835402582}
+  imgAllCardState:
+  - {fileID: 21300000, guid: aeecbbc2e9fe5a3458bf214830f57b88, type: 3}
+  - {fileID: 21300000, guid: a9ab05cc8003f6d41aa8831a3c6aba78, type: 3}
 --- !u!114 &114628229109164966
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -4489,6 +4677,10 @@ MonoBehaviour:
   fieldCardIndex: 0
   gameController: {fileID: 0}
   txtCard: {fileID: 114038477458291222}
+  imgCard: {fileID: 114261583007960718}
+  imgAllCardState:
+  - {fileID: 21300000, guid: aeecbbc2e9fe5a3458bf214830f57b88, type: 3}
+  - {fileID: 21300000, guid: a9ab05cc8003f6d41aa8831a3c6aba78, type: 3}
 --- !u!114 &114810987414466558
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -4528,7 +4720,18 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 114053698556850054}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 114129276707873174}
+        m_MethodName: ToggleSelect
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
 --- !u!114 &114813362442004982
@@ -4761,6 +4964,10 @@ MonoBehaviour:
   fieldCardIndex: 1
   gameController: {fileID: 0}
   txtCard: {fileID: 114719459043865796}
+  imgCard: {fileID: 114263476017738040}
+  imgAllCardState:
+  - {fileID: 21300000, guid: aeecbbc2e9fe5a3458bf214830f57b88, type: 3}
+  - {fileID: 21300000, guid: a9ab05cc8003f6d41aa8831a3c6aba78, type: 3}
 --- !u!114 &114860218479731386
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -4821,7 +5028,7 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
-  m_Sprite: {fileID: 21300000, guid: 461febcbc6cfa19488c64c11efbc91ed, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 666d03f9002339d4891eb601c5ffdac1, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -4844,6 +5051,10 @@ MonoBehaviour:
   fieldCardIndex: 0
   gameController: {fileID: 0}
   txtCard: {fileID: 114434600624429922}
+  imgCard: {fileID: 114260364215070734}
+  imgAllCardState:
+  - {fileID: 21300000, guid: aeecbbc2e9fe5a3458bf214830f57b88, type: 3}
+  - {fileID: 21300000, guid: a9ab05cc8003f6d41aa8831a3c6aba78, type: 3}
 --- !u!114 &114875745617903536
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -4937,7 +5148,18 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 114580079919288762}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 114135169322080332}
+        m_MethodName: ToggleSelect
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
 --- !u!114 &114880394136764786
@@ -5826,6 +6048,12 @@ CanvasRenderer:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1361993801465268}
+--- !u!222 &222911690386867096
+CanvasRenderer:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1125816872761850}
 --- !u!222 &222921658912993006
 CanvasRenderer:
   m_ObjectHideFlags: 1
@@ -6071,6 +6299,24 @@ RectTransform:
   m_AnchorMax: {x: 0.89000005, y: 0.5}
   m_AnchoredPosition: {x: 1.0999985, y: -0.31500244}
   m_SizeDelta: {x: 0.16000366, y: -0.45999908}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!224 &224122570825198654
+RectTransform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1125816872761850}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 224793695384143302}
+  m_RootOrder: 5
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.53729033, y: 0.8135907}
+  m_AnchorMax: {x: 0.5862626, y: 0.892}
+  m_AnchoredPosition: {x: 1.5, y: 1.9199829}
+  m_SizeDelta: {x: 2.3599854, y: -0.98999023}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &224123448982809004
 RectTransform:
@@ -7374,6 +7620,7 @@ RectTransform:
   - {fileID: 224197495670513396}
   - {fileID: 224279616944877668}
   - {fileID: 224945984965221940}
+  - {fileID: 224122570825198654}
   m_Father: {fileID: 224600728358044196}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

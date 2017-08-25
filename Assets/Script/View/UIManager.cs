@@ -19,28 +19,62 @@ namespace SichuanDynasty.UI
         [SerializeField]
         Text[] txtCardNum;
 
+        [SerializeField]
+        GameObject gameOverUI;
+
+        [SerializeField]
+        GameObject gameplayUI;
+
+
+        bool _isInitShowGameOver;
+
+
+        public UIManager()
+        {
+            _isInitShowGameOver = false;
+        }
+
 
         void Update()
         {
             if (gameController) {
-                if (gameController.IsGameInit && gameController.IsGameStart && !gameController.IsGameOver) {
-                    if (Input.GetButtonDown("Player_Pause")) {
-                        gameController.ToggleGamePause();
-                        pausePanel.SetActive(gameController.IsGamePause);
-                    }
+                if (gameController.IsGameInit && gameController.IsGameStart) {
 
-                    for (int i = 0; i < disableDecksView.Length; i++) {
-                        if (gameController.Players[i].DisableDeck.Cards.Count > 0) {
-                            disableDecksView[i].SetActive(true);
-                            txtCardNum[i].text = gameController.Players[i].DisableDeck.Cards[0].ToString();
+                    if (!gameController.IsGameOver) {
 
-                        } else {
-                            disableDecksView[i].SetActive(false);
+                        if (Input.GetButtonDown("Player_Pause")) {
+                            gameController.ToggleGamePause();
+                            pausePanel.SetActive(gameController.IsGamePause);
+                        }
 
+                        for (int i = 0; i < disableDecksView.Length; i++) {
+
+                            if (gameController.Players[i].DisableDeck.Cards.Count > 0) {
+                                disableDecksView[i].SetActive(true);
+                                txtCardNum[i].text = gameController.Players[i].DisableDeck.Cards[0].ToString();
+
+                            } else {
+                                disableDecksView[i].SetActive(false);
+
+                            }
+                        }
+                    } else {
+                        if (gameOverUI && gameplayUI) {
+                            if (!_isInitShowGameOver) {
+                                StartCoroutine("_ShowGameOverUI");
+                                _isInitShowGameOver = true;
+                            }
                         }
                     }
                 }
             }
+        }
+
+        IEnumerator _ShowGameOverUI()
+        {
+            yield return new WaitForSeconds(1.0f);
+            gameplayUI.SetActive(false);
+            gameOverUI.SetActive(true);
         }
     }
 }
