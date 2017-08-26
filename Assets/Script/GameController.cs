@@ -19,6 +19,9 @@ namespace SichuanDynasty
         [SerializeField]
         GameObject[] parentCards;
 
+        [SerializeField]
+        UIManager uiManager;
+
 
         public const int MAX_PLAYER_SUPPORT = 2;
         public const int MAX_PLAYER_HEALTH_PER_GAME = 30;
@@ -34,6 +37,7 @@ namespace SichuanDynasty
         public bool IsInteractable { get { return _isInteractable; } }
 
         public int TotalTurn { get { return _totalTurn; } }
+        public int CurrentPlayerIndex { get { return _currentPlayerIndex; } }
         public Phase CurrentPhase { get { return _currentPhase; } }
 
         public Player[] Players { get { return _players; } }
@@ -334,9 +338,14 @@ namespace SichuanDynasty
 
         void _MoveUsedCard()
         {
-            for (int i = 0; i < _currentSelectedCardCache.Count; i++) {
-                _players[_currentPlayerIndex].DisableDeck.Cards.Add(_currentSelectedCardCache[i]);
-                _players[_currentPlayerIndex].FieldDeck.Cards.Remove(_currentSelectedCardCache[i]);
+            if (_currentSelectedCardCache.Count > 0) {
+                for (int i = 0; i < _currentSelectedCardCache.Count; i++) {
+                    _players[_currentPlayerIndex].DisableDeck.Cards.Add(_currentSelectedCardCache[i]);
+                    _players[_currentPlayerIndex].FieldDeck.Cards.Remove(_currentSelectedCardCache[i]);
+                }
+
+                uiManager.InitHandleSelectingCards();
+                uiManager.UpdateAvailableButton(_currentPlayerIndex);
             }
         }
 
@@ -466,6 +475,7 @@ namespace SichuanDynasty
         {
             _isInitNextTurn = true;
             _timer.Stop();
+            uiManager.DisableHandlingSelectingCards();
             StartCoroutine("_NextTurnCallBack");
         }
 
