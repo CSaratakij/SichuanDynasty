@@ -293,8 +293,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   firstSelectedCards:
-  - {fileID: 729025602}
-  - {fileID: 1997861599}
+  - {fileID: 94507883}
+  - {fileID: 1117373604}
   eventSystem:
   - {fileID: 639403121}
   - {fileID: 846656049}

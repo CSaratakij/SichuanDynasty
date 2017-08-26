@@ -44,7 +44,7 @@ namespace SichuanDynasty.UI
 
         bool _isInitHandle;
         bool _isHandlingSelectingCards;
-
+        bool _isAxisInUse;
 
         List<GameObject> _currentAvailableButton;
         int _currentSelectIndex;
@@ -55,20 +55,24 @@ namespace SichuanDynasty.UI
             _isInitShowGameOver = false;
             _isInitHandle = false;
             _isHandlingSelectingCards = false;
+            _isAxisInUse = false;
             _currentAvailableButton = new List<GameObject>();
             _currentSelectIndex = 0;
         }
 
-        public void InitHandleSelectingCards()
+        public void InitHandleSelectingCards(int playerIndex)
         {
             _isInitHandle = true;
+            UpdateAvailableButton(playerIndex);
         }
 
         public void DisableHandlingSelectingCards()
         {
+            _isInitHandle = false;
             _isHandlingSelectingCards = false;
             _currentAvailableButton.Clear();
             _currentSelectIndex = 0;
+            _isAxisInUse = false;
         }
 
         public void UpdateAvailableButton(int playerIndex)
@@ -91,6 +95,7 @@ namespace SichuanDynasty.UI
                 }
             }
         }
+
 
         void Update()
         {
@@ -162,7 +167,7 @@ namespace SichuanDynasty.UI
                 } else if (playerIndex == 1) {
                     foreach (GameObject obj in player2Cards) {
                         if (obj.activeSelf) {
-                            allEventSystem[1].SetSelectedGameObject(obj);
+                            allEventSystem[2].SetSelectedGameObject(obj);
                         }
                         break;
                     }
@@ -202,26 +207,46 @@ namespace SichuanDynasty.UI
             if (_currentAvailableButton.Count > 0) {
                 if (playerIndex == 0) {
 
-                    var axis = Input.GetAxis("Player1_Vertical");
-                    if (axis > 0) {
-                        _currentSelectIndex = (_currentSelectIndex - 1) < 0 ? 0 : _currentSelectIndex - 1;
-                        allEventSystem[1].SetSelectedGameObject(_currentAvailableButton[_currentSelectIndex]);
+                    var axis = Input.GetAxisRaw("Player1_Vertical");
+                    if (!_isAxisInUse) {
+                        if (axis == 1) {
+                            _currentSelectIndex = (_currentSelectIndex - 1) < 0 ? 0 : _currentSelectIndex - 1;
+                            allEventSystem[1].SetSelectedGameObject(_currentAvailableButton[_currentSelectIndex]);
+                            _isAxisInUse = true;
 
-                    } else if (axis < 0) {
-                        _currentSelectIndex = (_currentSelectIndex + 1) > (_currentAvailableButton.Count - 1) ? (_currentAvailableButton.Count - 1) : _currentSelectIndex + 1;
-                        allEventSystem[1].SetSelectedGameObject(_currentAvailableButton[_currentSelectIndex]);
+                        } else if (axis == -1) {
+                            _currentSelectIndex = (_currentSelectIndex + 1) > (_currentAvailableButton.Count - 1) ? (_currentAvailableButton.Count - 1) : _currentSelectIndex + 1;
+                            allEventSystem[1].SetSelectedGameObject(_currentAvailableButton[_currentSelectIndex]);
+                            _isAxisInUse = true;
+                        }
+                    } else {
+                        if (axis == 0) {
+                            _isAxisInUse = false;
+
+                        }
                     }
 
                 } else if (playerIndex == 1) {
-                    var axis = Input.GetAxis("Player2_Vertical");
-                    if (axis > 0) {
-                        _currentSelectIndex = (_currentSelectIndex - 1) < 0 ? 0 : _currentSelectIndex - 1;
-                        allEventSystem[2].SetSelectedGameObject(_currentAvailableButton[_currentSelectIndex]);
+                    var axis = Input.GetAxisRaw("Player2_Vertical");
+                    if (!_isAxisInUse) {
+                        if (axis == 1) {
+                            _currentSelectIndex = (_currentSelectIndex - 1) < 0 ? 0 : _currentSelectIndex - 1;
+                            allEventSystem[2].SetSelectedGameObject(_currentAvailableButton[_currentSelectIndex]);
+                            _isAxisInUse = true;
 
-                    } else if (axis < 0) {
-                        _currentSelectIndex = (_currentSelectIndex + 1) > (_currentAvailableButton.Count - 1) ? (_currentAvailableButton.Count - 1) : _currentSelectIndex + 1;
-                        allEventSystem[2].SetSelectedGameObject(_currentAvailableButton[_currentSelectIndex]);
+                        } else if (axis == -1) {
+                            _currentSelectIndex = (_currentSelectIndex + 1) > (_currentAvailableButton.Count - 1) ? (_currentAvailableButton.Count - 1) : _currentSelectIndex + 1;
+                            allEventSystem[2].SetSelectedGameObject(_currentAvailableButton[_currentSelectIndex]);
+                            _isAxisInUse = true;
+                        }
+                    } else {
+                        if (axis == 0) {
+                            _isAxisInUse = false;
+
+                        }
                     }
+
+
                 }
             }
         }

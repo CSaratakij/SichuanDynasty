@@ -134,6 +134,7 @@ namespace SichuanDynasty
             }
 
             eventSystem[0].gameObject.SetActive(false);
+
             eventSystem[_currentPlayerIndex].gameObject.SetActive(true);
             eventSystem[_currentPlayerIndex].SetSelectedGameObject(firstSelectedCards[_currentPlayerIndex]);
 
@@ -257,7 +258,10 @@ namespace SichuanDynasty
 
                     } else {
                         if (_timer.IsFinished) {
-                            _NextTurn();
+                            if (!_isInitNextTurn) {
+                                _NextTurn();
+                                _isInitNextTurn = true;
+                            }
                         }
                     }
 
@@ -344,7 +348,7 @@ namespace SichuanDynasty
                     _players[_currentPlayerIndex].FieldDeck.Cards.Remove(_currentSelectedCardCache[i]);
                 }
 
-                uiManager.InitHandleSelectingCards();
+                uiManager.InitHandleSelectingCards(_currentPlayerIndex);
                 uiManager.UpdateAvailableButton(_currentPlayerIndex);
             }
         }
@@ -490,8 +494,8 @@ namespace SichuanDynasty
             _currentPlayerIndex = (_currentPlayerIndex == (_players.Length - 1)) ? 0 : _currentPlayerIndex + 1;
 
             _players[_currentPlayerIndex].SetTurn(true);
-
             eventSystem[_currentPlayerIndex].gameObject.SetActive(true);
+
             eventSystem[_currentPlayerIndex].SetSelectedGameObject(firstSelectedCards[_currentPlayerIndex]);
         }
 
@@ -500,6 +504,7 @@ namespace SichuanDynasty
             foreach (Transform cardObj in parentCards[_currentPlayerIndex].gameObject.transform) {
                 if (cardObj.gameObject.activeSelf) {
                     eventSystem[_currentPlayerIndex].SetSelectedGameObject(cardObj.gameObject);
+                    break;
                 }
             }
         }
