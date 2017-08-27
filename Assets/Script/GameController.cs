@@ -487,12 +487,6 @@ namespace SichuanDynasty
 
         void _DrawNewCard(int playerIndex)
         {
-            for (int i = 0; i < _players[playerIndex].DisableDeck.Cards.Count; i++) {
-                _players[playerIndex].NormalDeck.Cards.Add(_players[playerIndex].DisableDeck.Cards[i]);
-            }
-
-            _players[playerIndex].DisableDeck.Cards.Clear();
-
             var totalDraw = MAX_FIELD_CARD_PER_GAME - _players[playerIndex].FieldDeck.Cards.Count;
 
             for (int i = 0; i < totalDraw; i++) {
@@ -510,6 +504,12 @@ namespace SichuanDynasty
                 _fieldCache_2 = _players[playerIndex].FieldDeck.Cards.ToArray();
 
             }
+
+            for (int i = 0; i < _players[playerIndex].DisableDeck.Cards.Count; i++) {
+                _players[playerIndex].NormalDeck.Cards.Add(_players[playerIndex].DisableDeck.Cards[i]);
+            }
+
+            _players[playerIndex].DisableDeck.Cards.Clear();
         }
 
         void _NextTurn()
