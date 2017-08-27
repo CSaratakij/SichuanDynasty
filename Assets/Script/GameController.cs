@@ -27,6 +27,7 @@ namespace SichuanDynasty
         public const int MAX_PLAYER_HEALTH_PER_GAME = 30;
         public const int MAX_PHASE_PER_PLAYER = 2;
         public const int MAX_FIELD_CARD_PER_GAME = 4;
+        public const int MAX_HEAL_CARD = 2;
         public const float MAX_TIME_PER_PHASE = 60.0f;
 
 
@@ -35,6 +36,7 @@ namespace SichuanDynasty
         public bool IsGameOver { get { return _isGameOver; } }
         public bool IsGamePause { get { return _isGamePause; } }
         public bool IsInteractable { get { return _isInteractable; } }
+        public bool IsExceedHealCard { get { return _isExceedHealCard; } }
 
         public int TotalTurn { get { return _totalTurn; } }
         public int CurrentPlayerIndex { get { return _currentPlayerIndex; } }
@@ -69,6 +71,8 @@ namespace SichuanDynasty
         bool _isInitNextTurn;
         bool _isInteractable;
 
+        bool _isExceedHealCard;
+
         Phase _currentPhase;
 
         Player[] _players;
@@ -79,6 +83,8 @@ namespace SichuanDynasty
 
         int[] _fieldCache_1;
         int[] _fieldCache_2;
+
+        int _healCardStack;
 
 
         public GameController()
@@ -93,11 +99,13 @@ namespace SichuanDynasty
             _isHasWinner = false;
             _isInitNextTurn = false;
             _isInteractable = true;
+            _isExceedHealCard = false;
             _currentPhase = Phase.None;
             _players = new Player[MAX_PLAYER_SUPPORT];
             _currentSelectedCardCache = new List<int>();
             _fieldCache_1 = new int[MAX_FIELD_CARD_PER_GAME];
             _fieldCache_2 = new int[MAX_FIELD_CARD_PER_GAME];
+            _healCardStack = 0;
         }
 
         public void ExitGame()
@@ -355,7 +363,7 @@ namespace SichuanDynasty
 
         void _Attack(int targetIndex)
         {
-            var isAttakAble = IsAttackAble(targetIndex);
+            var isAttakAble = _IsAttackAble(targetIndex);
 
             if (isAttakAble) {
 
@@ -377,7 +385,7 @@ namespace SichuanDynasty
             }
         }
 
-        bool IsAttackAble(int targetIndex)
+        bool _IsAttackAble(int targetIndex)
         {
             var totalPoint = 0;
             foreach (int point in _currentSelectedCardCache) {
@@ -389,7 +397,7 @@ namespace SichuanDynasty
 
         void _Heal(int targetIndex)
         {
-            var isHealable = IsHealable();
+            var isHealable = _IsHealable();
 
             if (isHealable) {
                 _SetActivateCard(_currentPlayerIndex, false);
@@ -407,14 +415,43 @@ namespace SichuanDynasty
             }
         }
 
-        bool IsHealable()
+        bool _IsHealable()
         {
             var totalPoint = 0;
-            foreach (int point in _currentSelectedCardCache) {
-                totalPoint += point;
-            }
 
-            return (_players[_currentPlayerIndex].Health.Current + totalPoint) <= MAX_PLAYER_HEALTH_PER_GAME;
+            if (_currentSelectedCardCache.Count > MAX_HEAL_CARD) {
+                _isExceedHealCard = true;
+                return false;
+
+            } else {
+                if (_healCardStack < MAX_HEAL_CARD) {
+                    if (_currentSelectedCardCache.Count <= (MAX_HEAL_CARD - _healCardStack)) {
+
+                        foreach (int point in _currentSelectedCardCache) {
+                            totalPoint += point;
+                        }
+
+                        if ((_players[_currentPlayerIndex].Health.Current + totalPoint) <= MAX_PLAYER_HEALTH_PER_GAME) {
+                            _healCardStack += _currentSelectedCardCache.Count;
+                            _isExceedHealCard = _healCardStack >= MAX_HEAL_CARD;
+                            return true;
+
+                        } else {
+                            return false;
+
+                        }
+                    } else {
+                        _isExceedHealCard = true;
+                        return false;
+
+                    }
+
+                } else {
+                    _isExceedHealCard = true;
+                    return false;
+
+                }
+            }
         }
 
         void _CheckWinner()
@@ -513,6 +550,8 @@ namespace SichuanDynasty
         {
             yield return new WaitForSeconds(0.8f);
             _totalTurn++;
+            _healCardStack = 0;
+            _isExceedHealCard = false;
             _DrawNewCard(_currentPlayerIndex);
             _SetActivateCard(_currentPlayerIndex, true);
             _ChangePlayer();
