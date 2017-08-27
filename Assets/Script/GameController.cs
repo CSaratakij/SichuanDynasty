@@ -24,7 +24,7 @@ namespace SichuanDynasty
 
 
         public const int MAX_PLAYER_SUPPORT = 2;
-        public const int MAX_PLAYER_HEALTH_PER_GAME = 30;
+        public const int MAX_PLAYER_HEALTH_PER_GAME = 31;
         public const int MAX_PHASE_PER_PLAYER = 2;
         public const int MAX_FIELD_CARD_PER_GAME = 4;
         public const int MAX_HEAL_CARD = 2;
