@@ -39,6 +39,15 @@ namespace SichuanDynasty.UI
         [SerializeField]
         GameObject[] player2Cards;
 
+        [SerializeField]
+        Image imgCurrentPlayerTurn;
+
+        [SerializeField]
+        Sprite[] spritePlayerTurn;
+
+        [SerializeField]
+        GameObject[] selectDialogs;
+
 
         bool _isInitShowGameOver;
 
@@ -96,6 +105,13 @@ namespace SichuanDynasty.UI
             }
         }
 
+        public void HideAllSelectDialog()
+        {
+            foreach (GameObject obj in selectDialogs) {
+                obj.SetActive(false);
+            }
+        }
+
 
         void Update()
         {
@@ -103,6 +119,8 @@ namespace SichuanDynasty.UI
                 if (gameController.IsGameInit && gameController.IsGameStart) {
 
                     if (!gameController.IsGameOver) {
+
+                        imgCurrentPlayerTurn.sprite = gameController.Players[0].IsTurn ? spritePlayerTurn[0] : spritePlayerTurn[1];
 
                         if (Input.GetButtonDown("Player_Pause")) {
                             gameController.ToggleGamePause();

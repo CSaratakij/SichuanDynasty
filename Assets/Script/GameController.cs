@@ -28,6 +28,9 @@ namespace SichuanDynasty
         public const int MAX_PHASE_PER_PLAYER = 2;
         public const int MAX_FIELD_CARD_PER_GAME = 4;
         public const int MAX_HEAL_CARD = 2;
+        public const int MAX_CRITICAL_STACK = 2;
+        public const int MAX_CRITICAL_TURN = 2;
+
         public const float MAX_TIME_PER_PHASE = 60.0f;
 
 
@@ -46,6 +49,9 @@ namespace SichuanDynasty
 
         public int[] FieldCardCache_1 { get { return _fieldCache_1; } }
         public int[] FieldCardCache_2 { get { return _fieldCache_2; } }
+
+        public int TotalHealPoint { get { return _totalHealPoint; } }
+        public int TotalAttackPoint { get { return _totalAttackPoint; } }
 
 
         public enum Phase
@@ -86,6 +92,9 @@ namespace SichuanDynasty
 
         int _healCardStack;
 
+        int _totalHealPoint;
+        int _totalAttackPoint;
+
 
         public GameController()
         {
@@ -106,6 +115,8 @@ namespace SichuanDynasty
             _fieldCache_1 = new int[MAX_FIELD_CARD_PER_GAME];
             _fieldCache_2 = new int[MAX_FIELD_CARD_PER_GAME];
             _healCardStack = 0;
+            _totalHealPoint = 0;
+            _totalAttackPoint = 0;
         }
 
         public void ExitGame()
@@ -517,6 +528,7 @@ namespace SichuanDynasty
             _isInitNextTurn = true;
             _timer.Stop();
             uiManager.DisableHandlingSelectingCards();
+            uiManager.HideAllSelectDialog();
             StartCoroutine("_NextTurnCallBack");
         }
 

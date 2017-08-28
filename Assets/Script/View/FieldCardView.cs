@@ -2,10 +2,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 
 namespace SichuanDynasty.UI
 {
-    public class FieldCardView : MonoBehaviour
+    public class FieldCardView : MonoBehaviour, ISelectHandler, IDeselectHandler
     {
         [SerializeField]
         int playerIndex;
@@ -25,6 +26,12 @@ namespace SichuanDynasty.UI
         [SerializeField]
         Sprite[] imgAllCardState;
 
+        [SerializeField]
+        GameObject imgSelectDialog;
+
+        [SerializeField]
+        GameObject imgConfirmSelect;
+
 
         public bool IsSelected { get { return _isSelected; } }
 
@@ -35,6 +42,21 @@ namespace SichuanDynasty.UI
         public FieldCardView()
         {
             _isSelected = false;
+        }
+
+        public void OnSelect(BaseEventData data)
+        {
+            imgSelectDialog.SetActive(true);
+        }
+
+        public void OnDeselect(BaseEventData data)
+        {
+            imgSelectDialog.SetActive(false);
+        }
+
+        public void HideSelectDialog()
+        {
+            imgSelectDialog.SetActive(false);
         }
 
         public void ToggleSelect()
@@ -65,7 +87,7 @@ namespace SichuanDynasty.UI
 
                     }
 
-                    imgCard.sprite = (_isSelected) ? imgAllCardState[1] : imgAllCardState[0];
+                    imgConfirmSelect.SetActive(_isSelected);
 
                     if (_isSelected) {
 
