@@ -586,9 +586,17 @@ namespace SichuanDynasty
 
         IEnumerator _ShowStatusCallBack(int totalPoint)
         {
-            yield return new WaitForSeconds(0.7f);
             var targetIndex = _currentPlayerIndex == 0 ? 1 : 0;
-            _players[targetIndex].Health.Remove(totalPoint);
+            if (totalPoint == _players[targetIndex].Health.Current) {
+                _players[targetIndex].Health.Remove(totalPoint);
+            }
+
+            yield return new WaitForSeconds(0.7f);
+
+            if (_players[targetIndex].Health.Current > 0) {
+                _players[targetIndex].Health.Remove(totalPoint);
+            }
+
             uiManager.ShowPointStatus(targetIndex, "-", totalPoint); //<--- have to wait to finished.
             anims[targetIndex].Play("Hit");
             _CheckWinner();

@@ -176,14 +176,8 @@ namespace SichuanDynasty.UI
 
                         imgCurrentPlayerTurn.sprite = gameController.Players[0].IsTurn ? spritePlayerTurn[0] : spritePlayerTurn[1];
 
-                        var isPlayer1HealthIsCritical = (gameController.Players[0].Health.Current > 0) && (gameController.Players[0].Health.Current <= GameController.MAX_CRITICAL_STACK);
-                        anims[0].SetBool("IsHurt", isPlayer1HealthIsCritical);
-
-                        var isPlayer2HealthIsCritical = (gameController.Players[1].Health.Current > 0) && (gameController.Players[1].Health.Current <= GameController.MAX_CRITICAL_STACK);
-                        anims[1].SetBool("IsHurt", isPlayer2HealthIsCritical);
-
-                        imgCriticals[0].SetActive(isPlayer1HealthIsCritical);
-                        imgCriticals[1].SetActive(isPlayer2HealthIsCritical);
+                        imgCriticals[0].SetActive(gameController.Players[0].Health.Current <= GameController.MAX_CRITICAL_STACK);
+                        imgCriticals[1].SetActive(gameController.Players[1].Health.Current <= GameController.MAX_CRITICAL_STACK);
 
                         if (Input.GetButtonDown("Player_Pause")) {
                             gameController.ToggleGamePause();
@@ -337,7 +331,7 @@ namespace SichuanDynasty.UI
 
         IEnumerator _ShowGameOverUI()
         {
-            yield return new WaitForSeconds(1.5f);
+            yield return new WaitForSeconds(1.3f);
             gameplayUI.SetActive(false);
             gameOverUI.SetActive(true);
 
