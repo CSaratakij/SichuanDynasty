@@ -418,6 +418,46 @@ Prefab:
       propertyPath: selectDialogs.Array.size
       value: 8
       objectReference: {fileID: 0}
+    - target: {fileID: 114037152455853040, guid: b4918e590fb25b841b0d724ca6e4f18b,
+        type: 2}
+      propertyPath: spriteAllConfirmSelect.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 114971693483297488, guid: b4918e590fb25b841b0d724ca6e4f18b,
+        type: 2}
+      propertyPath: spriteAllConfirmSelect.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 114923585723656238, guid: b4918e590fb25b841b0d724ca6e4f18b,
+        type: 2}
+      propertyPath: spriteAllConfirmSelect.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 114192399069121282, guid: b4918e590fb25b841b0d724ca6e4f18b,
+        type: 2}
+      propertyPath: spriteAllConfirmSelect.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 114555084219224888, guid: b4918e590fb25b841b0d724ca6e4f18b,
+        type: 2}
+      propertyPath: spriteAllConfirmSelect.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 114696091237997510, guid: b4918e590fb25b841b0d724ca6e4f18b,
+        type: 2}
+      propertyPath: spriteAllConfirmSelect.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 114635164795107356, guid: b4918e590fb25b841b0d724ca6e4f18b,
+        type: 2}
+      propertyPath: spriteAllConfirmSelect.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 114614538346193832, guid: b4918e590fb25b841b0d724ca6e4f18b,
+        type: 2}
+      propertyPath: spriteAllConfirmSelect.Array.size
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 224600728358044196, guid: b4918e590fb25b841b0d724ca6e4f18b,
         type: 2}
       propertyPath: m_LocalPosition.x
@@ -688,6 +728,102 @@ Prefab:
       propertyPath: selectDialogs.Array.data[7]
       value: 
       objectReference: {fileID: 1799836926}
+    - target: {fileID: 114037152455853040, guid: b4918e590fb25b841b0d724ca6e4f18b,
+        type: 2}
+      propertyPath: spriteAllConfirmSelect.Array.data[0]
+      value: 
+      objectReference: {fileID: 21300000, guid: 8457a6ba623dcaa42a27d0e7fe5f3428,
+        type: 3}
+    - target: {fileID: 114923585723656238, guid: b4918e590fb25b841b0d724ca6e4f18b,
+        type: 2}
+      propertyPath: spriteAllConfirmSelect.Array.data[0]
+      value: 
+      objectReference: {fileID: 21300000, guid: 8457a6ba623dcaa42a27d0e7fe5f3428,
+        type: 3}
+    - target: {fileID: 114971693483297488, guid: b4918e590fb25b841b0d724ca6e4f18b,
+        type: 2}
+      propertyPath: spriteAllConfirmSelect.Array.data[0]
+      value: 
+      objectReference: {fileID: 21300000, guid: 8457a6ba623dcaa42a27d0e7fe5f3428,
+        type: 3}
+    - target: {fileID: 114192399069121282, guid: b4918e590fb25b841b0d724ca6e4f18b,
+        type: 2}
+      propertyPath: spriteAllConfirmSelect.Array.data[0]
+      value: 
+      objectReference: {fileID: 21300000, guid: 8457a6ba623dcaa42a27d0e7fe5f3428,
+        type: 3}
+    - target: {fileID: 114037152455853040, guid: b4918e590fb25b841b0d724ca6e4f18b,
+        type: 2}
+      propertyPath: spriteAllConfirmSelect.Array.data[1]
+      value: 
+      objectReference: {fileID: 21300000, guid: a07771ff6e8d5854da580c444ee3b30c,
+        type: 3}
+    - target: {fileID: 114971693483297488, guid: b4918e590fb25b841b0d724ca6e4f18b,
+        type: 2}
+      propertyPath: spriteAllConfirmSelect.Array.data[1]
+      value: 
+      objectReference: {fileID: 21300000, guid: a07771ff6e8d5854da580c444ee3b30c,
+        type: 3}
+    - target: {fileID: 114923585723656238, guid: b4918e590fb25b841b0d724ca6e4f18b,
+        type: 2}
+      propertyPath: spriteAllConfirmSelect.Array.data[1]
+      value: 
+      objectReference: {fileID: 21300000, guid: a07771ff6e8d5854da580c444ee3b30c,
+        type: 3}
+    - target: {fileID: 114192399069121282, guid: b4918e590fb25b841b0d724ca6e4f18b,
+        type: 2}
+      propertyPath: spriteAllConfirmSelect.Array.data[1]
+      value: 
+      objectReference: {fileID: 21300000, guid: a07771ff6e8d5854da580c444ee3b30c,
+        type: 3}
+    - target: {fileID: 114555084219224888, guid: b4918e590fb25b841b0d724ca6e4f18b,
+        type: 2}
+      propertyPath: spriteAllConfirmSelect.Array.data[0]
+      value: 
+      objectReference: {fileID: 21300000, guid: 38c0adffe154aa14584d8ece351dc072,
+        type: 3}
+    - target: {fileID: 114696091237997510, guid: b4918e590fb25b841b0d724ca6e4f18b,
+        type: 2}
+      propertyPath: spriteAllConfirmSelect.Array.data[0]
+      value: 
+      objectReference: {fileID: 21300000, guid: 38c0adffe154aa14584d8ece351dc072,
+        type: 3}
+    - target: {fileID: 114635164795107356, guid: b4918e590fb25b841b0d724ca6e4f18b,
+        type: 2}
+      propertyPath: spriteAllConfirmSelect.Array.data[0]
+      value: 
+      objectReference: {fileID: 21300000, guid: 38c0adffe154aa14584d8ece351dc072,
+        type: 3}
+    - target: {fileID: 114614538346193832, guid: b4918e590fb25b841b0d724ca6e4f18b,
+        type: 2}
+      propertyPath: spriteAllConfirmSelect.Array.data[0]
+      value: 
+      objectReference: {fileID: 21300000, guid: 38c0adffe154aa14584d8ece351dc072,
+        type: 3}
+    - target: {fileID: 114555084219224888, guid: b4918e590fb25b841b0d724ca6e4f18b,
+        type: 2}
+      propertyPath: spriteAllConfirmSelect.Array.data[1]
+      value: 
+      objectReference: {fileID: 21300000, guid: 36d7141c629cf0843ae1628c54c58171,
+        type: 3}
+    - target: {fileID: 114696091237997510, guid: b4918e590fb25b841b0d724ca6e4f18b,
+        type: 2}
+      propertyPath: spriteAllConfirmSelect.Array.data[1]
+      value: 
+      objectReference: {fileID: 21300000, guid: 36d7141c629cf0843ae1628c54c58171,
+        type: 3}
+    - target: {fileID: 114635164795107356, guid: b4918e590fb25b841b0d724ca6e4f18b,
+        type: 2}
+      propertyPath: spriteAllConfirmSelect.Array.data[1]
+      value: 
+      objectReference: {fileID: 21300000, guid: 36d7141c629cf0843ae1628c54c58171,
+        type: 3}
+    - target: {fileID: 114614538346193832, guid: b4918e590fb25b841b0d724ca6e4f18b,
+        type: 2}
+      propertyPath: spriteAllConfirmSelect.Array.data[1]
+      value: 
+      objectReference: {fileID: 21300000, guid: 36d7141c629cf0843ae1628c54c58171,
+        type: 3}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: b4918e590fb25b841b0d724ca6e4f18b, type: 2}
   m_IsPrefabParent: 0

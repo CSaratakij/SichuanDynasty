@@ -32,6 +32,9 @@ namespace SichuanDynasty.UI
         [SerializeField]
         GameObject imgConfirmSelect;
 
+        [SerializeField]
+        Sprite[] spriteAllConfirmSelect;
+
 
         public bool IsSelected { get { return _isSelected; } }
 
@@ -47,6 +50,7 @@ namespace SichuanDynasty.UI
         public void OnSelect(BaseEventData data)
         {
             imgSelectDialog.SetActive(true);
+            imgSelectDialog.GetComponent<Image>().sprite = _isSelected ? spriteAllConfirmSelect[1] : spriteAllConfirmSelect[0];
         }
 
         public void OnDeselect(BaseEventData data)
@@ -68,6 +72,10 @@ namespace SichuanDynasty.UI
                 if (_isSelected && (gameController.CurrentPhase == GameController.Phase.Shuffle)) {
                     gameController.SetInteractable(false);
                     StartCoroutine("_ChangeToBattlePhase");
+                }
+
+                if (gameController.CurrentPhase != GameController.Phase.Shuffle) {
+                    imgSelectDialog.GetComponent<Image>().sprite = _isSelected ? spriteAllConfirmSelect[1] : spriteAllConfirmSelect[0];
                 }
             }
         }
