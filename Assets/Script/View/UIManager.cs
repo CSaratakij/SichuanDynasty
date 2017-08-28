@@ -337,7 +337,7 @@ namespace SichuanDynasty.UI
 
         IEnumerator _ShowGameOverUI()
         {
-            yield return new WaitForSeconds(1.0f);
+            yield return new WaitForSeconds(1.5f);
             gameplayUI.SetActive(false);
             gameOverUI.SetActive(true);
 

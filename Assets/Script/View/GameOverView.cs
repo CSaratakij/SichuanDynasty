@@ -34,12 +34,12 @@ namespace SichuanDynasty.UI
                     var isPlayer1Win = gameController.Players[0].IsWin;
 
                     if (isPlayer1Win) {
-                        anims[0].SetBool("IsWin", true);
-                        anims[1].SetBool("IsLose", true);
+                        anims[0].Play("Win");
+                        anims[1].Play("Lose");
 
                     } else {
-                        anims[0].SetBool("IsLose", true);
-                        anims[1].SetBool("IsWin", true);
+                        anims[0].Play("Lose");
+                        anims[1].Play("Win");
 
                     }
 

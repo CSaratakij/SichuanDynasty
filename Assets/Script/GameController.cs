@@ -394,16 +394,13 @@ namespace SichuanDynasty
                 }
 
                 _MoveUsedCard();
-
                 _currentSelectedCardCache.Clear();
-                _players[targetIndex].Health.Remove(totalPoint);
-
 
                 if (totalPoint > 0) {
-                    uiManager.ShowPointStatus(targetIndex, "-", totalPoint); //<--- have to wait to finished.
+                    StartCoroutine("_ShowStatusCallBack", totalPoint);
+                    anims[_currentPlayerIndex].Play("Attack");
                 }
 
-                _CheckWinner();
                 _ReHightlightCard();
 
             } else {
@@ -480,6 +477,7 @@ namespace SichuanDynasty
                         }
                     } else {
                         _isExceedHealCard = true;
+                        uiManager.AlertWarning(1);
                         return false;
 
                     }
@@ -584,6 +582,16 @@ namespace SichuanDynasty
                     break;
                 }
             }
+        }
+
+        IEnumerator _ShowStatusCallBack(int totalPoint)
+        {
+            yield return new WaitForSeconds(0.7f);
+            var targetIndex = _currentPlayerIndex == 0 ? 1 : 0;
+            _players[targetIndex].Health.Remove(totalPoint);
+            uiManager.ShowPointStatus(targetIndex, "-", totalPoint); //<--- have to wait to finished.
+            anims[targetIndex].Play("Hit");
+            _CheckWinner();
         }
 
         IEnumerator _NextTurnCallBack()
