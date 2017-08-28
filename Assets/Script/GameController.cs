@@ -265,6 +265,8 @@ namespace SichuanDynasty
         void HandleGame()
         {
             if (_isGameInit && _isGameStart && !_isGameOver) {
+                anims[0].SetInteger("Health", _players[0].Health.Current);
+                anims[1].SetInteger("Health", _players[1].Health.Current);
 
                 if (!_isHasWinner) {
 
@@ -397,8 +399,8 @@ namespace SichuanDynasty
                 _currentSelectedCardCache.Clear();
 
                 if (totalPoint > 0) {
-                    StartCoroutine("_ShowStatusCallBack", totalPoint);
                     anims[_currentPlayerIndex].Play("Attack");
+                    StartCoroutine("_ShowStatusCallBack", totalPoint);
                 }
 
                 _ReHightlightCard();
@@ -441,6 +443,7 @@ namespace SichuanDynasty
 
                 if (totalPoint > 0) {
                     uiManager.ShowPointStatus(targetIndex, "+", totalPoint);
+
                 }
 
                 _ReHightlightCard();
@@ -584,6 +587,11 @@ namespace SichuanDynasty
             }
         }
 
+        void _PlayHurtAnimation(int targetIndex)
+        {
+            anims[targetIndex].Play("Hurt");
+        }
+
         IEnumerator _ShowStatusCallBack(int totalPoint)
         {
             var targetIndex = _currentPlayerIndex == 0 ? 1 : 0;
@@ -597,8 +605,9 @@ namespace SichuanDynasty
                 _players[targetIndex].Health.Remove(totalPoint);
             }
 
-            uiManager.ShowPointStatus(targetIndex, "-", totalPoint); //<--- have to wait to finished.
+            uiManager.ShowPointStatus(targetIndex, "-", totalPoint);
             anims[targetIndex].Play("Hit");
+
             _CheckWinner();
         }
 
