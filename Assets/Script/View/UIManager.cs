@@ -60,6 +60,9 @@ namespace SichuanDynasty.UI
         [SerializeField]
         GameObject[] imgWarning;
 
+        [SerializeField]
+        StatusView[] statusViews;
+
 
         bool _isInitShowGameOver;
 
@@ -151,6 +154,10 @@ namespace SichuanDynasty.UI
             foreach (GameObject obj in imgWarning) {
                 obj.SetActive(false);
             }
+        }
+
+        public void ShowPointStatus(int targetPlayerIndex, string sign, int totalPoint) {
+            statusViews[targetPlayerIndex].ShowStatus(sign, totalPoint);
         }
 
 
