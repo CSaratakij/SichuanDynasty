@@ -57,6 +57,9 @@ namespace SichuanDynasty.UI
         [SerializeField]
         Sprite[] spriteAllPlayerTurn;
 
+        [SerializeField]
+        GameObject[] imgWarning;
+
 
         bool _isInitShowGameOver;
 
@@ -134,6 +137,22 @@ namespace SichuanDynasty.UI
                 break;
             }
         }
+
+        public void AlertWarning(int cause)
+        {
+            ClearWarning();
+            if (cause < imgWarning.Length) {
+                imgWarning[cause].SetActive(true);
+            }
+        }
+
+        public void ClearWarning()
+        {
+            foreach (GameObject obj in imgWarning) {
+                obj.SetActive(false);
+            }
+        }
+
 
         void Update()
         {

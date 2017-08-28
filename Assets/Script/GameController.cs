@@ -381,6 +381,7 @@ namespace SichuanDynasty
 
             if (isAttakAble) {
 
+                uiManager.ClearWarning();
                 _SetActivateCard(_currentPlayerIndex, false);
 
                 var totalPoint = 0;
@@ -396,6 +397,10 @@ namespace SichuanDynasty
 
                 _CheckWinner();
                 _ReHightlightCard();
+
+            } else {
+                uiManager.AlertWarning(2);
+
             }
         }
 
@@ -414,7 +419,10 @@ namespace SichuanDynasty
             var isHealable = _IsHealable();
 
             if (isHealable) {
+
+                uiManager.ClearWarning();
                 _SetActivateCard(_currentPlayerIndex, false);
+
                 var totalPoint = 0;
 
                 foreach (int point in _currentSelectedCardCache) {
@@ -435,10 +443,12 @@ namespace SichuanDynasty
 
             if (_currentSelectedCardCache.Count > MAX_HEAL_CARD) {
                 _isExceedHealCard = true;
+                uiManager.AlertWarning(1);
                 return false;
 
             } else {
                 if (_healCardStack < MAX_HEAL_CARD) {
+
                     if (_currentSelectedCardCache.Count <= (MAX_HEAL_CARD - _healCardStack)) {
 
                         foreach (int point in _currentSelectedCardCache) {
@@ -451,6 +461,7 @@ namespace SichuanDynasty
                             return true;
 
                         } else {
+                            uiManager.AlertWarning(0);
                             return false;
 
                         }
@@ -462,6 +473,7 @@ namespace SichuanDynasty
 
                 } else {
                     _isExceedHealCard = true;
+                    uiManager.AlertWarning(1);
                     return false;
 
                 }
@@ -571,6 +583,7 @@ namespace SichuanDynasty
             _SetActivateCard(_currentPlayerIndex, true);
             _ChangePlayer();
             _currentPhase = Phase.Shuffle;
+            uiManager.ClearWarning();
             uiManager.AlertCurrentPhase(_currentPhase); // <-- test..
             _isNextTurn = true;
         }
