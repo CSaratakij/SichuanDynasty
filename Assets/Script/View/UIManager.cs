@@ -63,6 +63,12 @@ namespace SichuanDynasty.UI
         [SerializeField]
         StatusView[] statusViews;
 
+        [SerializeField]
+        Animator[] anims;
+
+        [SerializeField]
+        GameObject[] imgCriticals;
+
 
         bool _isInitShowGameOver;
 
@@ -170,6 +176,15 @@ namespace SichuanDynasty.UI
 
                         imgCurrentPlayerTurn.sprite = gameController.Players[0].IsTurn ? spritePlayerTurn[0] : spritePlayerTurn[1];
 
+                        var isPlayer1HealthIsCritical = (gameController.Players[0].Health.Current > 0) && (gameController.Players[0].Health.Current <= GameController.MAX_CRITICAL_STACK);
+                        anims[0].SetBool("IsHurt", isPlayer1HealthIsCritical);
+
+                        var isPlayer2HealthIsCritical = (gameController.Players[1].Health.Current > 0) && (gameController.Players[1].Health.Current <= GameController.MAX_CRITICAL_STACK);
+                        anims[1].SetBool("IsHurt", isPlayer2HealthIsCritical);
+
+                        imgCriticals[0].SetActive(isPlayer1HealthIsCritical);
+                        imgCriticals[1].SetActive(isPlayer2HealthIsCritical);
+
                         if (Input.GetButtonDown("Player_Pause")) {
                             gameController.ToggleGamePause();
                             pausePanel.SetActive(gameController.IsGamePause);
@@ -207,6 +222,8 @@ namespace SichuanDynasty.UI
                     } else {
                         if (gameOverUI && gameplayUI) {
                             if (!_isInitShowGameOver) {
+                                anims[0].SetBool("IsHurt", false);
+                                anims[1].SetBool("IsHurt", false);
                                 StartCoroutine("_ShowGameOverUI");
                                 _isInitShowGameOver = true;
 
