@@ -398,7 +398,10 @@ namespace SichuanDynasty
                 _currentSelectedCardCache.Clear();
                 _players[targetIndex].Health.Remove(totalPoint);
 
-                uiManager.ShowPointStatus(targetIndex, "-", totalPoint);
+
+                if (totalPoint > 0) {
+                    uiManager.ShowPointStatus(targetIndex, "-", totalPoint); //<--- have to wait to finished.
+                }
 
                 _CheckWinner();
                 _ReHightlightCard();
@@ -438,7 +441,10 @@ namespace SichuanDynasty
                 _currentSelectedCardCache.Clear();
 
                 _players[targetIndex].Health.Restore(totalPoint);
-                uiManager.ShowPointStatus(targetIndex, "+", totalPoint);
+
+                if (totalPoint > 0) {
+                    uiManager.ShowPointStatus(targetIndex, "+", totalPoint);
+                }
 
                 _ReHightlightCard();
             }
