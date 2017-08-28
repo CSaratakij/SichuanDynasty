@@ -160,6 +160,8 @@ namespace SichuanDynasty
             _fieldCache_1 = _players[0].FieldDeck.Cards.ToArray();
             _fieldCache_2 = _players[1].FieldDeck.Cards.ToArray();
 
+            uiManager.AlertCurrentPhase(_currentPhase);
+
             _isGameStart = true;
             _isNextTurn = true;
         }
@@ -179,6 +181,7 @@ namespace SichuanDynasty
         {
             if (_currentPhase == Phase.Shuffle) {
                 _currentPhase = Phase.Battle;
+                uiManager.AlertCurrentPhase(_currentPhase);
             }
 
             SetInteractable(true);
@@ -568,6 +571,7 @@ namespace SichuanDynasty
             _SetActivateCard(_currentPlayerIndex, true);
             _ChangePlayer();
             _currentPhase = Phase.Shuffle;
+            uiManager.AlertCurrentPhase(_currentPhase); // <-- test..
             _isNextTurn = true;
         }
     }

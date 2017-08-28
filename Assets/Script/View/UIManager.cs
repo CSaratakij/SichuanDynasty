@@ -48,6 +48,15 @@ namespace SichuanDynasty.UI
         [SerializeField]
         GameObject[] selectDialogs;
 
+        [SerializeField]
+        GameObject[] imgPhases;
+
+        [SerializeField]
+        Image imgPlayerTurn;
+
+        [SerializeField]
+        Sprite[] spriteAllPlayerTurn;
+
 
         bool _isInitShowGameOver;
 
@@ -112,6 +121,19 @@ namespace SichuanDynasty.UI
             }
         }
 
+        public void AlertCurrentPhase(GameController.Phase phase)
+        {
+            switch (phase) {
+                case GameController.Phase.Shuffle:
+                    imgPlayerTurn.sprite = gameController.Players[0].IsTurn ? spriteAllPlayerTurn[0] : spriteAllPlayerTurn[1];
+                    StartCoroutine("_ShowShufflePhaseAlert");
+                break;
+
+                case GameController.Phase.Battle:
+                    StartCoroutine("_ShowBattlePhaseAlert");
+                break;
+            }
+        }
 
         void Update()
         {
@@ -282,6 +304,22 @@ namespace SichuanDynasty.UI
 
             allEventSystem[0].gameObject.SetActive(true);
             allEventSystem[0].SetSelectedGameObject(btnRestart);
+        }
+
+        IEnumerator _ShowShufflePhaseAlert()
+        {
+            imgPlayerTurn.gameObject.SetActive(true);
+            imgPhases[0].SetActive(true);
+            yield return new WaitForSeconds(1.0f);
+            imgPhases[0].SetActive(false);
+            imgPlayerTurn.gameObject.SetActive(false);
+        }
+
+        IEnumerator _ShowBattlePhaseAlert()
+        {
+            imgPhases[1].SetActive(true);
+            yield return new WaitForSeconds(1.0f);
+            imgPhases[1].SetActive(false);
         }
     }
 }
