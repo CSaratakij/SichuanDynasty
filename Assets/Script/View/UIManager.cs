@@ -80,6 +80,9 @@ namespace SichuanDynasty.UI
         int _currentSelectIndex;
 
 
+        public bool IsFieldCardsEmpty { get { return _currentAvailableButton.Count == 0; } }
+
+
         public UIManager()
         {
             _isInitShowGameOver = false;

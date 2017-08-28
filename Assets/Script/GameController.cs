@@ -405,6 +405,10 @@ namespace SichuanDynasty
 
                 _ReHightlightCard();
 
+                if (uiManager.IsFieldCardsEmpty) {
+                    StartCoroutine("_DelayBeforeNextTurn");
+                }
+
             } else {
                 uiManager.AlertWarning(2);
 
@@ -447,6 +451,10 @@ namespace SichuanDynasty
                 }
 
                 _ReHightlightCard();
+
+                if (uiManager.IsFieldCardsEmpty) {
+                    StartCoroutine("_DelayBeforeNextTurn");
+                }
             }
         }
 
@@ -609,6 +617,15 @@ namespace SichuanDynasty
             anims[targetIndex].Play("Hit");
 
             _CheckWinner();
+        }
+
+        IEnumerator _DelayBeforeNextTurn()
+        {
+            yield return new WaitForSeconds(1.3f);
+            if (!_isInitNextTurn) {
+                _NextTurn();
+                _isInitNextTurn = true;
+            }
         }
 
         IEnumerator _NextTurnCallBack()
