@@ -22,6 +22,9 @@ namespace SichuanDynasty
         [SerializeField]
         UIManager uiManager;
 
+        [SerializeField]
+        Animator[] anims;
+
 
         public const int MAX_PLAYER_SUPPORT = 2;
         public const int MAX_PLAYER_HEALTH_PER_GAME = 31;
