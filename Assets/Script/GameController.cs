@@ -98,6 +98,8 @@ namespace SichuanDynasty
         int _totalHealPoint;
         int _totalAttackPoint;
 
+        bool _isInitDelayNextTurn;
+
 
         public GameController()
         {
@@ -120,6 +122,7 @@ namespace SichuanDynasty
             _healCardStack = 0;
             _totalHealPoint = 0;
             _totalAttackPoint = 0;
+            _isInitDelayNextTurn = false;
         }
 
         public void ExitGame()
@@ -275,6 +278,7 @@ namespace SichuanDynasty
                         _timer.Stop();
                         _timer.StartCountDown();
                         _isInitNextTurn = false;
+                        _isInitDelayNextTurn = false;
                         _isNextTurn = false;
                     }
 
@@ -407,7 +411,10 @@ namespace SichuanDynasty
                 _ReHightlightCard();
 
                 if (uiManager.IsFieldCardsEmpty()) {
-                    StartCoroutine("_DelayBeforeNextTurn");
+                    if (!_isInitDelayNextTurn) {
+                        StartCoroutine("_DelayBeforeNextTurn");
+                        _isInitDelayNextTurn = true;
+                    }
                 }
 
             } else {
@@ -454,7 +461,10 @@ namespace SichuanDynasty
                 _ReHightlightCard();
 
                 if (uiManager.IsFieldCardsEmpty()) {
-                    StartCoroutine("_DelayBeforeNextTurn");
+                    if (!_isInitDelayNextTurn) {
+                        StartCoroutine("_DelayBeforeNextTurn");
+                        _isInitDelayNextTurn = true;
+                    }
                 }
             }
         }
