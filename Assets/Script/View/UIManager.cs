@@ -85,9 +85,6 @@ namespace SichuanDynasty.UI
         GameObject _previousSelectedObj;
 
 
-        public bool IsFieldCardsEmpty { get { return _currentAvailableButton.Count == 0; } }
-
-
         public UIManager()
         {
             _isInitShowGameOver = false;
@@ -207,6 +204,36 @@ namespace SichuanDynasty.UI
 
             allEventSystem[gameController.CurrentPlayerIndex + 1].SetSelectedGameObject(_previousSelectedObj);
 
+        }
+
+
+        public bool IsFieldCardsEmpty()
+        {
+            var isEmpty = true;
+
+            switch (gameController.CurrentPlayerIndex) {
+                case 0:
+                    foreach (GameObject obj in player1Cards) {
+                        if (obj.activeSelf) {
+                            isEmpty = false;
+                            break;
+
+                        } 
+                    }
+                break;
+
+                case 1:
+                    foreach (GameObject obj in player2Cards) {
+                        if (obj.activeSelf) {
+                            isEmpty = false;
+                            break;
+
+                        } 
+                    }
+                break;
+            }
+
+            return isEmpty;
         }
 
 

@@ -405,7 +405,7 @@ namespace SichuanDynasty
 
                 _ReHightlightCard();
 
-                if (uiManager.IsFieldCardsEmpty) {
+                if (uiManager.IsFieldCardsEmpty()) {
                     StartCoroutine("_DelayBeforeNextTurn");
                 }
 
@@ -452,7 +452,7 @@ namespace SichuanDynasty
 
                 _ReHightlightCard();
 
-                if (uiManager.IsFieldCardsEmpty) {
+                if (uiManager.IsFieldCardsEmpty()) {
                     StartCoroutine("_DelayBeforeNextTurn");
                 }
             }
