@@ -39,6 +39,39 @@ namespace SichuanDynasty.UI
         [SerializeField]
         GameObject[] player2Cards;
 
+        [SerializeField]
+        Image imgCurrentPlayerTurn;
+
+        [SerializeField]
+        Sprite[] spritePlayerTurn;
+
+        [SerializeField]
+        GameObject[] selectDialogs;
+
+        [SerializeField]
+        GameObject[] imgPhases;
+
+        [SerializeField]
+        Image imgPlayerTurn;
+
+        [SerializeField]
+        Sprite[] spriteAllPlayerTurn;
+
+        [SerializeField]
+        GameObject[] imgWarning;
+
+        [SerializeField]
+        StatusView[] statusViews;
+
+        [SerializeField]
+        Animator[] anims;
+
+        [SerializeField]
+        GameObject[] imgCriticals;
+
+        [SerializeField]
+        GameObject btnMainMenuInPauseMenu;
+
 
         bool _isInitShowGameOver;
 
@@ -48,6 +81,11 @@ namespace SichuanDynasty.UI
 
         List<GameObject> _currentAvailableButton;
         int _currentSelectIndex;
+
+        GameObject _previousSelectedObj;
+
+
+        public bool IsFieldCardsEmpty { get { return _currentAvailableButton.Count == 0; } }
 
 
         public UIManager()
@@ -96,6 +134,81 @@ namespace SichuanDynasty.UI
             }
         }
 
+        public void HideAllSelectDialog()
+        {
+            foreach (GameObject obj in selectDialogs) {
+                obj.SetActive(false);
+            }
+        }
+
+        public void AlertCurrentPhase(GameController.Phase phase)
+        {
+            switch (phase) {
+                case GameController.Phase.Shuffle:
+                    imgPlayerTurn.sprite = gameController.Players[0].IsTurn ? spriteAllPlayerTurn[0] : spriteAllPlayerTurn[1];
+                    StartCoroutine("_ShowShufflePhaseAlert");
+                break;
+
+                case GameController.Phase.Battle:
+                    StartCoroutine("_ShowBattlePhaseAlert");
+                break;
+            }
+        }
+
+        public void AlertWarning(int cause)
+        {
+            ClearWarning();
+            if (cause < imgWarning.Length) {
+                imgWarning[cause].SetActive(true);
+            }
+        }
+
+        public void ClearWarning()
+        {
+            foreach (GameObject obj in imgWarning) {
+                obj.SetActive(false);
+            }
+        }
+
+        public void ShowPointStatus(int targetPlayerIndex, string sign, int totalPoint) {
+            statusViews[targetPlayerIndex].ShowStatus(sign, totalPoint);
+        }
+
+        public void SelectFirstButtonInPauseMenu()
+        {
+            if (gameController.CurrentPlayerIndex == 0) {
+                _previousSelectedObj = player1Cards[0];
+
+            } else if (gameController.CurrentPlayerIndex == 1) {
+                _previousSelectedObj = player2Cards[0];
+
+            }
+
+            allEventSystem[1].gameObject.SetActive(false);
+            allEventSystem[2].gameObject.SetActive(false);
+
+            allEventSystem[0].gameObject.SetActive(true);
+            allEventSystem[0].SetSelectedGameObject(btnMainMenuInPauseMenu);
+        }
+
+        public void SelectPreviousButton()
+        {
+            allEventSystem[0].gameObject.SetActive(false);
+
+            if (gameController.CurrentPlayerIndex == 0) {
+                allEventSystem[1].gameObject.SetActive(true);
+                allEventSystem[2].gameObject.SetActive(false);
+
+            } else {
+                allEventSystem[1].gameObject.SetActive(false);
+                allEventSystem[2].gameObject.SetActive(true);
+
+            }
+
+            allEventSystem[gameController.CurrentPlayerIndex + 1].SetSelectedGameObject(_previousSelectedObj);
+
+        }
+
 
         void Update()
         {
@@ -104,9 +217,23 @@ namespace SichuanDynasty.UI
 
                     if (!gameController.IsGameOver) {
 
+                        imgCurrentPlayerTurn.sprite = gameController.Players[0].IsTurn ? spritePlayerTurn[0] : spritePlayerTurn[1];
+
+                        imgCriticals[0].SetActive(gameController.Players[0].Health.Current <= GameController.MAX_CRITICAL_STACK);
+                        imgCriticals[1].SetActive(gameController.Players[1].Health.Current <= GameController.MAX_CRITICAL_STACK);
+
                         if (Input.GetButtonDown("Player_Pause")) {
+
                             gameController.ToggleGamePause();
                             pausePanel.SetActive(gameController.IsGamePause);
+
+                            if (pausePanel.gameObject.activeSelf) {
+                                SelectFirstButtonInPauseMenu();
+
+                            } else {
+                                SelectPreviousButton();
+
+                            }
                         }
 
                         for (int i = 0; i < disableDecksView.Length; i++) {
@@ -141,6 +268,8 @@ namespace SichuanDynasty.UI
                     } else {
                         if (gameOverUI && gameplayUI) {
                             if (!_isInitShowGameOver) {
+                                anims[0].SetBool("IsHurt", false);
+                                anims[1].SetBool("IsHurt", false);
                                 StartCoroutine("_ShowGameOverUI");
                                 _isInitShowGameOver = true;
 
@@ -245,8 +374,6 @@ namespace SichuanDynasty.UI
 
                         }
                     }
-
-
                 }
             }
         }
@@ -254,7 +381,7 @@ namespace SichuanDynasty.UI
 
         IEnumerator _ShowGameOverUI()
         {
-            yield return new WaitForSeconds(1.0f);
+            yield return new WaitForSeconds(1.3f);
             gameplayUI.SetActive(false);
             gameOverUI.SetActive(true);
 
@@ -264,6 +391,22 @@ namespace SichuanDynasty.UI
 
             allEventSystem[0].gameObject.SetActive(true);
             allEventSystem[0].SetSelectedGameObject(btnRestart);
+        }
+
+        IEnumerator _ShowShufflePhaseAlert()
+        {
+            imgPlayerTurn.gameObject.SetActive(true);
+            imgPhases[0].SetActive(true);
+            yield return new WaitForSeconds(1.0f);
+            imgPhases[0].SetActive(false);
+            imgPlayerTurn.gameObject.SetActive(false);
+        }
+
+        IEnumerator _ShowBattlePhaseAlert()
+        {
+            imgPhases[1].SetActive(true);
+            yield return new WaitForSeconds(1.0f);
+            imgPhases[1].SetActive(false);
         }
     }
 }

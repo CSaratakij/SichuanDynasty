@@ -22,12 +22,18 @@ namespace SichuanDynasty
         [SerializeField]
         UIManager uiManager;
 
+        [SerializeField]
+        Animator[] anims;
+
 
         public const int MAX_PLAYER_SUPPORT = 2;
-        public const int MAX_PLAYER_HEALTH_PER_GAME = 30;
+        public const int MAX_PLAYER_HEALTH_PER_GAME = 31;
         public const int MAX_PHASE_PER_PLAYER = 2;
         public const int MAX_FIELD_CARD_PER_GAME = 4;
         public const int MAX_HEAL_CARD = 2;
+        public const int MAX_CRITICAL_STACK = 2;
+        public const int MAX_CRITICAL_TURN = 2;
+
         public const float MAX_TIME_PER_PHASE = 60.0f;
 
 
@@ -46,6 +52,9 @@ namespace SichuanDynasty
 
         public int[] FieldCardCache_1 { get { return _fieldCache_1; } }
         public int[] FieldCardCache_2 { get { return _fieldCache_2; } }
+
+        public int TotalHealPoint { get { return _totalHealPoint; } }
+        public int TotalAttackPoint { get { return _totalAttackPoint; } }
 
 
         public enum Phase
@@ -86,6 +95,9 @@ namespace SichuanDynasty
 
         int _healCardStack;
 
+        int _totalHealPoint;
+        int _totalAttackPoint;
+
 
         public GameController()
         {
@@ -106,6 +118,8 @@ namespace SichuanDynasty
             _fieldCache_1 = new int[MAX_FIELD_CARD_PER_GAME];
             _fieldCache_2 = new int[MAX_FIELD_CARD_PER_GAME];
             _healCardStack = 0;
+            _totalHealPoint = 0;
+            _totalAttackPoint = 0;
         }
 
         public void ExitGame()
@@ -149,6 +163,8 @@ namespace SichuanDynasty
             _fieldCache_1 = _players[0].FieldDeck.Cards.ToArray();
             _fieldCache_2 = _players[1].FieldDeck.Cards.ToArray();
 
+            uiManager.AlertCurrentPhase(_currentPhase);
+
             _isGameStart = true;
             _isNextTurn = true;
         }
@@ -168,6 +184,7 @@ namespace SichuanDynasty
         {
             if (_currentPhase == Phase.Shuffle) {
                 _currentPhase = Phase.Battle;
+                uiManager.AlertCurrentPhase(_currentPhase);
             }
 
             SetInteractable(true);
@@ -248,6 +265,8 @@ namespace SichuanDynasty
         void HandleGame()
         {
             if (_isGameInit && _isGameStart && !_isGameOver) {
+                anims[0].SetInteger("Health", _players[0].Health.Current);
+                anims[1].SetInteger("Health", _players[1].Health.Current);
 
                 if (!_isHasWinner) {
 
@@ -367,6 +386,7 @@ namespace SichuanDynasty
 
             if (isAttakAble) {
 
+                uiManager.ClearWarning();
                 _SetActivateCard(_currentPlayerIndex, false);
 
                 var totalPoint = 0;
@@ -376,12 +396,22 @@ namespace SichuanDynasty
                 }
 
                 _MoveUsedCard();
-
                 _currentSelectedCardCache.Clear();
-                _players[targetIndex].Health.Remove(totalPoint);
 
-                _CheckWinner();
+                if (totalPoint > 0) {
+                    anims[_currentPlayerIndex].Play("Attack");
+                    StartCoroutine("_ShowStatusCallBack", totalPoint);
+                }
+
                 _ReHightlightCard();
+
+                if (uiManager.IsFieldCardsEmpty) {
+                    StartCoroutine("_DelayBeforeNextTurn");
+                }
+
+            } else {
+                uiManager.AlertWarning(2);
+
             }
         }
 
@@ -400,7 +430,10 @@ namespace SichuanDynasty
             var isHealable = _IsHealable();
 
             if (isHealable) {
+
+                uiManager.ClearWarning();
                 _SetActivateCard(_currentPlayerIndex, false);
+
                 var totalPoint = 0;
 
                 foreach (int point in _currentSelectedCardCache) {
@@ -411,7 +444,17 @@ namespace SichuanDynasty
                 _currentSelectedCardCache.Clear();
 
                 _players[targetIndex].Health.Restore(totalPoint);
+
+                if (totalPoint > 0) {
+                    uiManager.ShowPointStatus(targetIndex, "+", totalPoint);
+
+                }
+
                 _ReHightlightCard();
+
+                if (uiManager.IsFieldCardsEmpty) {
+                    StartCoroutine("_DelayBeforeNextTurn");
+                }
             }
         }
 
@@ -421,10 +464,12 @@ namespace SichuanDynasty
 
             if (_currentSelectedCardCache.Count > MAX_HEAL_CARD) {
                 _isExceedHealCard = true;
+                uiManager.AlertWarning(1);
                 return false;
 
             } else {
                 if (_healCardStack < MAX_HEAL_CARD) {
+
                     if (_currentSelectedCardCache.Count <= (MAX_HEAL_CARD - _healCardStack)) {
 
                         foreach (int point in _currentSelectedCardCache) {
@@ -437,17 +482,20 @@ namespace SichuanDynasty
                             return true;
 
                         } else {
+                            uiManager.AlertWarning(0);
                             return false;
 
                         }
                     } else {
                         _isExceedHealCard = true;
+                        uiManager.AlertWarning(1);
                         return false;
 
                     }
 
                 } else {
                     _isExceedHealCard = true;
+                    uiManager.AlertWarning(1);
                     return false;
 
                 }
@@ -517,6 +565,7 @@ namespace SichuanDynasty
             _isInitNextTurn = true;
             _timer.Stop();
             uiManager.DisableHandlingSelectingCards();
+            uiManager.HideAllSelectDialog();
             StartCoroutine("_NextTurnCallBack");
         }
 
@@ -546,6 +595,39 @@ namespace SichuanDynasty
             }
         }
 
+        void _PlayHurtAnimation(int targetIndex)
+        {
+            anims[targetIndex].Play("Hurt");
+        }
+
+        IEnumerator _ShowStatusCallBack(int totalPoint)
+        {
+            var targetIndex = _currentPlayerIndex == 0 ? 1 : 0;
+            if (totalPoint == _players[targetIndex].Health.Current) {
+                _players[targetIndex].Health.Remove(totalPoint);
+            }
+
+            yield return new WaitForSeconds(0.7f);
+
+            if (_players[targetIndex].Health.Current > 0) {
+                _players[targetIndex].Health.Remove(totalPoint);
+            }
+
+            uiManager.ShowPointStatus(targetIndex, "-", totalPoint);
+            anims[targetIndex].Play("Hit");
+
+            _CheckWinner();
+        }
+
+        IEnumerator _DelayBeforeNextTurn()
+        {
+            yield return new WaitForSeconds(1.3f);
+            if (!_isInitNextTurn) {
+                _NextTurn();
+                _isInitNextTurn = true;
+            }
+        }
+
         IEnumerator _NextTurnCallBack()
         {
             yield return new WaitForSeconds(0.8f);
@@ -556,6 +638,8 @@ namespace SichuanDynasty
             _SetActivateCard(_currentPlayerIndex, true);
             _ChangePlayer();
             _currentPhase = Phase.Shuffle;
+            uiManager.ClearWarning();
+            uiManager.AlertCurrentPhase(_currentPhase); // <-- test..
             _isNextTurn = true;
         }
     }

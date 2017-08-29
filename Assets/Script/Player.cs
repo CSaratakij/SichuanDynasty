@@ -15,15 +15,18 @@ namespace SichuanDynasty
         Deck _disableDeck;
 
         Status _health;
+        Status _criticalStack;
 
 
         public bool IsTurn { get { return _isTurn; } }
         public bool IsWin { get { return _isWin; } }
+        public bool IsCritical { get { return _health.Current <= GameController.MAX_CRITICAL_STACK; } }
         public Deck NormalDeck { get { return _deck; } }
         public Deck FieldDeck { get { return _fieldDeck; } }
         public Deck SelectedDeck { get { return _selectedDeck; } }
         public Deck DisableDeck { get { return _disableDeck; } }
         public Status Health { get { return _health; } }
+        public Status CriticalStack { get { return _criticalStack; } }
 
 
         public Player()
@@ -36,6 +39,8 @@ namespace SichuanDynasty
             _disableDeck = new Deck();
             _deck.AddCards(1, 9);
             _health = new Status(0, GameController.MAX_PLAYER_HEALTH_PER_GAME);
+            _criticalStack = new Status(0, GameController.MAX_CRITICAL_STACK);
+            _criticalStack.Clear();
         }
 
         public void SetTurn(bool isTurn)

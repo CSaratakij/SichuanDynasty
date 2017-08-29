@@ -2,10 +2,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 
 namespace SichuanDynasty.UI
 {
-    public class FieldCardView : MonoBehaviour
+    public class FieldCardView : MonoBehaviour, ISelectHandler, IDeselectHandler
     {
         [SerializeField]
         int playerIndex;
@@ -25,6 +26,15 @@ namespace SichuanDynasty.UI
         [SerializeField]
         Sprite[] imgAllCardState;
 
+        [SerializeField]
+        GameObject imgSelectDialog;
+
+        [SerializeField]
+        GameObject imgConfirmSelect;
+
+        [SerializeField]
+        Sprite[] spriteAllConfirmSelect;
+
 
         public bool IsSelected { get { return _isSelected; } }
 
@@ -37,6 +47,22 @@ namespace SichuanDynasty.UI
             _isSelected = false;
         }
 
+        public void OnSelect(BaseEventData data)
+        {
+            imgSelectDialog.SetActive(true);
+            imgSelectDialog.GetComponent<Image>().sprite = _isSelected ? spriteAllConfirmSelect[1] : spriteAllConfirmSelect[0];
+        }
+
+        public void OnDeselect(BaseEventData data)
+        {
+            imgSelectDialog.SetActive(false);
+        }
+
+        public void HideSelectDialog()
+        {
+            imgSelectDialog.SetActive(false);
+        }
+
         public void ToggleSelect()
         {
             if (gameController.IsInteractable) {
@@ -46,6 +72,10 @@ namespace SichuanDynasty.UI
                 if (_isSelected && (gameController.CurrentPhase == GameController.Phase.Shuffle)) {
                     gameController.SetInteractable(false);
                     StartCoroutine("_ChangeToBattlePhase");
+                }
+
+                if (gameController.CurrentPhase != GameController.Phase.Shuffle) {
+                    imgSelectDialog.GetComponent<Image>().sprite = _isSelected ? spriteAllConfirmSelect[1] : spriteAllConfirmSelect[0];
                 }
             }
         }
@@ -65,7 +95,7 @@ namespace SichuanDynasty.UI
 
                     }
 
-                    imgCard.sprite = (_isSelected) ? imgAllCardState[1] : imgAllCardState[0];
+                    imgConfirmSelect.SetActive(_isSelected);
 
                     if (_isSelected) {
 
