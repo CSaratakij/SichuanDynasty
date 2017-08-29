@@ -176,7 +176,6 @@ namespace SichuanDynasty.UI
 
             if (isTile) {
                 _isTie = false;
-                _isProcess = true;
                 for (int i = 0; i < _results.Length; i++) {
                     _results[i] = RockPaperScissorState.None;
                 }
@@ -198,6 +197,8 @@ namespace SichuanDynasty.UI
                 gamepadPanels[i].SetActive(true);
                 resultPanels[i].SetActive(false);
             }
+
+            _isProcess = true;
         }
 
         IEnumerator _NextUI()
