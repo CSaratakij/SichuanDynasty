@@ -69,6 +69,9 @@ namespace SichuanDynasty.UI
         [SerializeField]
         GameObject[] imgCriticals;
 
+        [SerializeField]
+        GameObject btnMainMenuInPauseMenu;
+
 
         bool _isInitShowGameOver;
 
@@ -78,6 +81,8 @@ namespace SichuanDynasty.UI
 
         List<GameObject> _currentAvailableButton;
         int _currentSelectIndex;
+
+        GameObject _previousSelectedObj;
 
 
         public bool IsFieldCardsEmpty { get { return _currentAvailableButton.Count == 0; } }
@@ -169,6 +174,41 @@ namespace SichuanDynasty.UI
             statusViews[targetPlayerIndex].ShowStatus(sign, totalPoint);
         }
 
+        public void SelectFirstButtonInPauseMenu()
+        {
+            if (gameController.CurrentPlayerIndex == 0) {
+                _previousSelectedObj = player1Cards[0];
+
+            } else if (gameController.CurrentPlayerIndex == 1) {
+                _previousSelectedObj = player2Cards[0];
+
+            }
+
+            allEventSystem[1].gameObject.SetActive(false);
+            allEventSystem[2].gameObject.SetActive(false);
+
+            allEventSystem[0].gameObject.SetActive(true);
+            allEventSystem[0].SetSelectedGameObject(btnMainMenuInPauseMenu);
+        }
+
+        public void SelectPreviousButton()
+        {
+            allEventSystem[0].gameObject.SetActive(false);
+
+            if (gameController.CurrentPlayerIndex == 0) {
+                allEventSystem[1].gameObject.SetActive(true);
+                allEventSystem[2].gameObject.SetActive(false);
+
+            } else {
+                allEventSystem[1].gameObject.SetActive(false);
+                allEventSystem[2].gameObject.SetActive(true);
+
+            }
+
+            allEventSystem[gameController.CurrentPlayerIndex + 1].SetSelectedGameObject(_previousSelectedObj);
+
+        }
+
 
         void Update()
         {
@@ -183,8 +223,17 @@ namespace SichuanDynasty.UI
                         imgCriticals[1].SetActive(gameController.Players[1].Health.Current <= GameController.MAX_CRITICAL_STACK);
 
                         if (Input.GetButtonDown("Player_Pause")) {
+
                             gameController.ToggleGamePause();
                             pausePanel.SetActive(gameController.IsGamePause);
+
+                            if (pausePanel.gameObject.activeSelf) {
+                                SelectFirstButtonInPauseMenu();
+
+                            } else {
+                                SelectPreviousButton();
+
+                            }
                         }
 
                         for (int i = 0; i < disableDecksView.Length; i++) {
@@ -325,8 +374,6 @@ namespace SichuanDynasty.UI
 
                         }
                     }
-
-
                 }
             }
         }
